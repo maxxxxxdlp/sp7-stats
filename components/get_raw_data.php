@@ -50,6 +50,7 @@ foreach($files as $file){
 
 	$file_data = file_get_contents($file);
 	$file_data = explode("\n", $file_data);
+	$file_data = array_reverse($file_data);
 
 	foreach($file_data as $line){
 

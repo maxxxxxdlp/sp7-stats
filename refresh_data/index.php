@@ -6,9 +6,6 @@ $no_gui = array_key_exists('no_gui',$_GET);
 if($no_gui)
 	define('NO_HEAD',TRUE);
 
-const CSS = 'refresh_data';
-
-
 require_once('../components/header.php');
 
 
@@ -70,8 +67,8 @@ function prepare_dir($dir){
 }
 
 
-require_file('../components/unzip.php');
-require_file('../components/get_raw_data.php');
+//require_file('../components/unzip.php');
+//require_file('../components/get_raw_data.php');
 require_file('../components/compile_data.php');
 
 
@@ -81,8 +78,13 @@ else {
 	file_put_contents(UNZIP_LOCATION.'misc.json',json_encode(['timestamp'=>time()]));
 	alert('primary','Success!');
 
+	if(array_key_exists('referrer',$_GET))
+		$referrer = $_GET['referrer'];
+	else
+		$referrer = LINK;
+
 	if(!$no_gui)
-		alert('info','<a href="'.LINK.'">Click here to go back to main page</a>');
+		alert('info','<a href="'.$referrer.'">Click here to go back to main page</a>');
 
 }
 
