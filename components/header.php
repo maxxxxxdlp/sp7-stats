@@ -60,7 +60,10 @@ if(!defined('NO_HEAD')){
 			rel="icon"
 			type="image/png"
 			sizes="150x150"
-			href="https://sp7demofish.specifycloud.org/static/img/fav_icon.png"> <?php
+			href="https://sp7demofish.specifycloud.org/static/img/fav_icon.png">
+	<link
+			rel="stylesheet"
+			href="<?=LINK?>static/css/main.css"><?php
 
 	if(defined('CSS')) { ?>
 		<link
@@ -85,6 +88,10 @@ if(!defined('NO_HEAD')){
 
 	if(defined('JS')){ ?>
 		<script src="<?=LINK?>static/js/<?=JS?>.js"></script> <?php
+	}
+
+	if(defined('MENU_JS')){ ?>
+		<script src="<?=LINK?>static/js/menu.js"></script> <?php
 	} ?>
 
 </head>

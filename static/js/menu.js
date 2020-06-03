@@ -10,9 +10,9 @@ $(function(){
 		if(current_file !== selected_file){
 
 			if(selected_file==='0')
-				window.location.href = link;
+				window.location.href = file_less_link;
 			else
-				window.location.href = link+'?file='+selected_file;
+				window.location.href = file_less_link+'file='+selected_file;
 		}
 
 	});
