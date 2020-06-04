@@ -62,11 +62,9 @@ if(!file_exists($misc_file_path)){ // file does not exists because data was not 
 $misc = json_decode(file_get_contents($misc_file_path),true);
 
 
-
 function unix_time_to_human_time($time){
 
 	$time_passed = time()-$time;
-	$result = '';
 
 	if($time_passed<60)
 		$result = $time_passed.' seconds ago';
@@ -87,32 +85,41 @@ function unix_time_to_human_time($time){
 
 $info_message = 'Data was last refreshed '.unix_time_to_human_time($misc['timestamp']).'.';
 $info_message_level = 'info';
+
+if(array_key_exists('total_lines',$misc))
+	$info_message .= ' There are '.$misc['total_lines'].' records total';
+
 if(time() - $misc['timestamp'] > SHOW_DATA_OUT_OF_DATE_WARNING_AFTER){
 	$info_message .= ' You should probably refresh data now';
 	$info_message_level = 'warning';
 }
-echo '<div class="alert alert-'.$info_message_level.'">'.$info_message.'</div>';
+echo '<div id="last_refresh_alert" class="alert alert-'.$info_message_level.'">'.$info_message.'</div>';
 
 
-$files = glob(UNZIP_LOCATION.'tsv/*.tsv'); ?>
 
-	<a
-		href="refresh_data/"
-		class="btn btn-success"
-		id="refresh"
-		target="_blank">Refresh Data</a><br><br>
+$files = glob(UNZIP_LOCATION.'tsv/*.tsv');
+$files = array_reverse($files); ?>
 
-	<label>
+<a
+	href="refresh_data/?referrer=<?=$real_link?>"
+	class="btn btn-success"
+	id="refresh"
+	target="_blank">Refresh Data</a><br><br> <?php
+
+if($misc['total_lines']==0){
+	footer();
+	exit();
+} ?>
+
+<label>
 	<select
 		id="show_data_for"
-		class="form-control">
-
-		<option name="0">Show data for entire period</option> <?php
+		class="form-control"> <?php
 
 		if(array_key_exists('file',$_GET) && file_exists(UNZIP_LOCATION.'tsv/'.$_GET['file']))
 			$current_file = $_GET['file'];
 		else
-			$current_file = 0;
+			$current_file = FALSE;
 
 		foreach($files as $file){
 
@@ -125,6 +132,9 @@ $files = glob(UNZIP_LOCATION.'tsv/*.tsv'); ?>
 
 			$selected_append = '';
 
+			if(!$current_file)
+				$current_file = $file;
+
 			if($file==$current_file)
 				$selected_append = 'selected'; ?>
 
@@ -135,15 +145,21 @@ $files = glob(UNZIP_LOCATION.'tsv/*.tsv'); ?>
 	</select>
 </label><br>
 
-	<script>
+<script>
 	const current_file = '<?=$current_file?>';
 	const link = '<?=$real_link?>';
 	const file_less_link = '<?=$file_less_link?>';
 </script>  <?php
 
-if($current_file==0)
-	$files = glob(UNZIP_LOCATION.'tsv/*.tsv');
-else
+if(strtotime($unix_begin)>SHOW_DATA_OUT_OF_DATE_WARNING_AFTER && $info_message_level=='info'){ ?>
+	<script>
+		$('#last_refresh_alert')[0].outerHTML += '<div class="alert alert-danger">We have not received any new log files since <?=$unix_begin?>. Make sure `FILES_LOCATION` is set correctly to your Nginx\'s log directory</div>';
+	</script> <?php
+}
+
+#if(!$current_file)
+#	$files = glob(UNZIP_LOCATION.'tsv/*.tsv');
+#else
 	$files = [UNZIP_LOCATION.'tsv/'.$current_file];
 
 
