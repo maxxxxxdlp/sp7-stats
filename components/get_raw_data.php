@@ -1,5 +1,7 @@
 <?php
 
+global $total_lines;
+
 $process_only_one_file = FALSE;//for debug only
 
 
@@ -12,10 +14,8 @@ prepare_dir($files_target_dir);
 $unix_begin = 0;
 $unix_end = 0;
 $result_file_extension = '.tsv';
-$file_number = 0;
 $total_lines = 0;
 $data = [];
-
 
 
 function save_data($unix_begin,$data,$files_target_dir,$result_file_extension){
@@ -30,13 +30,10 @@ function save_data($unix_begin,$data,$files_target_dir,$result_file_extension){
 	$file_name = $files_target_dir.$unix_begin.'_'.$unix_end.$result_file_extension;
 
 	file_put_contents($file_name,$file_content);
-	if(file_exists($file_name))
-		alert('success','Successfully saved <i>'.$file_name.'</i>');
-	else
-		alert('error','Unable to save <i>'.$file_name.'</i>');
-
-
-	$lines_since_last_save = 0;
+	if(!file_exists($file_name))
+		alert('danger','Unable to save <i>'.$file_name.'</i>');
+	elseif(VERBOSE)
+		alert('secondary','Successfully saved <i>'.$file_name.'</i>');
 
 }
 
@@ -80,8 +77,33 @@ foreach($files as $file){
 		//URL
 		$needle = ' ';
 		$part_end = strpos($line,$needle);
-		$line_data['url'] = substr($line,0,$part_end);///capture
+		$url = substr($line,0,$part_end);///capture
 		$line = substr($line,$part_end+strlen($needle));
+
+//		$in_array = FALSE;
+//		foreach(LINKS_TO_CAPTURE as $link)
+//			if(substr($url,0,strlen($link))==$link){
+//				$in_array = TRUE;
+//				break;
+//			}
+//
+//		if(!$in_array)
+//			continue;
+
+		if(substr($url,0,strlen('/capture?'))!=='/capture?')
+			continue;
+
+		$url = substr($url,strlen('/capture?'));
+		$url = explode('&',$url);
+
+		foreach($url as $param){
+
+			$param = explode('=',$param);
+			$line_data[$param[0]] = str_replace('+',' ',$param[1]);
+
+		}
+
+
 
 		//HTTP CODE
 		$needle = ' ';
@@ -92,7 +114,7 @@ foreach($files as $file){
 		$http_code = substr($line,0,$part_end);//204
 		$line = substr($line,$part_end+strlen($needle)+1);
 
-		if(in_array($http_code,HTTP_CODES_TO_EXCLUDE))
+		if(!in_array($http_code,HTTP_CODES_TO_ACCEPT))
 			continue;
 
 		//USER AGENT
@@ -127,9 +149,21 @@ foreach($files as $file){
 
 	}
 
+	if(DELETE_LOG_FILES_IN_UNZIP_LOCATION){
+		unlink($file);
+
+		if(file_exists($file))
+			alert('danger','Unable to delete <i>'.$file.'</i>. Make sure your web server has write permissions to <i>'.UNZIP_LOCATION.'</i>');
+		elseif(VERBOSE)
+			alert('secondary','<i>'.$file.'</i> was deleted successfully');
+	}
+
 }
 
 if(count($data) != 0)
 	save_data($unix_begin,$data,$files_target_dir,$result_file_extension);
 
-alert('info','Successfully extracted <b>'.$total_lines.'</b> rows of data');
+if($total_lines==0)
+	alert('danger','There were <b>0</b> records matching your filters. Please change your filters or change a pointer to a different directory');
+else
+	alert('info','Extracted <b>'.$total_lines.'</b> rows of data');

@@ -5,6 +5,8 @@ $files = glob(UNZIP_LOCATION.'tsv/*.tsv');
 $files_target_dir = UNZIP_LOCATION.'ips/';
 prepare_dir($files_target_dir);
 
+$file_count = 0;
+
 
 foreach($files as $file){
 
@@ -36,10 +38,15 @@ foreach($files as $file){
 
 	file_put_contents(UNZIP_LOCATION.'ips/'.$file.'.json',json_encode($dates));
 
-	if(file_exists(UNZIP_LOCATION.'ips/'.$file.'.json'))
-		alert('success','<i>'.UNZIP_LOCATION.'ips/'.$file.'.json</i> was successfully created');
-	else
-		alert('error','Failed to create <i>'.UNZIP_LOCATION.'ips/'.$file.'.json</i>');
+	if(!file_exists(UNZIP_LOCATION.'ips/'.$file.'.json'))
+		alert('danger','Failed to create <i>'.UNZIP_LOCATION.'ips/'.$file.'.json</i>');
+	elseif(VERBOSE)
+		alert('secondary','<i>'.UNZIP_LOCATION.'ips/'.$file.'.json</i> was successfully created');
+
+	$file_count++;
 
 
 }
+
+if($file_count>0)
+	alert('info','Extracted information about '.$file_count.' institutions');

@@ -27,11 +27,17 @@ define('IPS_LOG_LOCATION','/home/ec2-user/data/ip_list.txt');
 
 
 define('SHOW_DATA_OUT_OF_DATE_WARNING_AFTER','86400');
-define('SPLIT_DATA',200);
+define('SPLIT_DATA',2000);
 
-const HTTP_CODES_TO_EXCLUDE = [
-	'204',
+define('DELETE_LOG_FILES_IN_UNZIP_LOCATION',TRUE);//deletes .log files in `UNZIP_LOCATION` after they are no longer needed. This can save some space if your machine is low on memory
+define('VERBOSE',FALSE);
 
+const HTTP_CODES_TO_ACCEPT = [
+	'204',//empty response
 ];
 
-define('COLUMNS',['IP','Date','URL','User Agent']);
+//const LINKS_TO_CAPTURE = [
+//	'/capture?',
+//];
+
+define('COLUMNS',['IP','Date','SP7','SP6','Institution','Discipline','Collection','Isa Number','User Agent']);

@@ -1,16 +1,20 @@
 <?php
 
-require_once('components/menu.php'); ?>
+require_once('components/menu.php');
+
+if(!isset($current_file))
+	exit(); ?>
 
 <table class="table table-striped">
 	<thead>
 		<tr>
 
-			<th>Record</th> <?php
+<!--			<th>Record</th> --><?php
 
 			foreach(COLUMNS as $column)
-				if($column=='IP')
+				if($column=='Date')
 					echo '<th><a href="'.$reverse_sort_link.'" title="Click to reverse">' . $column . '</a></th>';
+				elseif($column=='IP' || $column=='User Agent'){}
 				else
 					echo '<th>' . $column . '</th>'; ?>
 
@@ -19,9 +23,7 @@ require_once('components/menu.php'); ?>
 	<tbody> <?php
 
 
-		$ips_link_part = '';
-		if(array_key_exists('file',$_GET))
-			$ips_link_part = '&file='.$_GET['file'];
+		$ips_link_part = '&file='.$current_file;
 
 		$line_number=1;
 		foreach($files as $file){
@@ -38,17 +40,21 @@ require_once('components/menu.php'); ?>
 				if($line == '')
 					continue;
 
-				$line_data = array_merge([$line_number],explode("\t",$line));
+				//$line_data = array_merge([$line_number],explode("\t",$line));
+				$line_data = explode("\t",$line);
 
 				echo '<tr>';
 
 				$count = count($line_data);
 				for($i=0;$i<$count;$i++){
 
-					if($i==1)
-						echo '<td><a href="'.LINK.'host_info?ip='.$line_data[$i].$ips_link_part.'">'.$line_data[$i].'</a></td>';
-					elseif($i==2)
+					if(COLUMNS[$i]=='IP' || COLUMNS[$i]=='User Agent')
+						continue;
+						//echo '<td><a href="'.LINK.'host_info?ip='.$line_data[$i].$ips_link_part.'">'.$line_data[$i].'</a></td>';
+					elseif(COLUMNS[$i]=='Date')
 						echo '<td>'.unix_time_to_human_time($line_data[$i]).'</td>';
+					elseif(COLUMNS[$i]=='Institution' || COLUMNS[$i]=='Discipline' || COLUMNS[$i]=='Collection')
+						echo '<td>'.urldecode($line_data[$i]).'</td>';
 					else
 						echo '<td>'.$line_data[$i].'</td>';
 
