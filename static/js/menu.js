@@ -1,11 +1,10 @@
-
 $(function(){
 
 	const file_picker_select = $('#show_data_for');
 
 	file_picker_select.change(function(){
 
-		const selected_file = file_picker_select.find("option:selected").attr('name');
+		const selected_file = file_picker_select.find("option:selected").attr('value');
 
 		if(current_file !== selected_file){
 

@@ -3,74 +3,63 @@
 require_once('components/menu.php');
 
 if(!isset($current_file))
-	exit(); ?>
+	exit();
 
-<table class="table table-striped">
-	<thead>
-		<tr>
+$json_file = str_replace('tsv','json',$current_file);
+$file_path = UNZIP_LOCATION.'institutions/';
 
-<!--			<th>Record</th> --><?php
+if(!file_exists($file_path.$json_file))
+	exit('File does not exist');
 
-			foreach(COLUMNS as $column)
-				if($column=='Date')
-					echo '<th><a href="'.$reverse_sort_link.'" title="Click to reverse">' . $column . '</a></th>';
-				elseif($column=='IP' || $column=='User Agent'){}
-				else
-					echo '<th>' . $column . '</th>'; ?>
+$institutions = json_decode(file_get_contents($file_path.$json_file),true);
 
-		</tr>
-	</thead>
-	<tbody> <?php
+echo '<ol>';
+foreach($institutions as $institution => $disciplines){
 
+	echo '<li><a href="' . get_link_for_custom_get(['Institution' => $institution, 'Discipline' => '', 'Collection' => ''], FALSE, LINK . '/institutions/') . '">'.urldecode($institution).'</a><ul>';
 
-		$ips_link_part = '&file='.$current_file;
+	foreach($disciplines as $discipline => $collections){
 
-		$line_number=1;
-		foreach($files as $file){
+		echo '<li><a href="'.get_link_for_custom_get(['Institution'=>$institution,'Discipline'=>$discipline,'Collection'=>'',FALSE,LINK.'/institutions/']).'">'.urldecode($discipline).'</a><ul>';
 
+		foreach($collections as $collection => $data){
+			echo '<li>
+				<a href="'.get_link_for_custom_get(['Institution'=>$institution,'Discipline'=>$discipline,'Collection'=>$collection,FALSE,LINK.'/institutions/']).'">'.urldecode($collection).'</a>
+				<br>Specify 7 versions: '.implode(', ',$data['sp7_version']).'
+				<br>Specify 6 versions: '.implode(', ',$data['sp6_version']);
 
-			$data = file_get_contents($file);
-			$data = explode("\n",$data);
+			if(count($data['isa_number'])>0)
+				echo '<br>ISA Numbers: '.implode(', ',$data['isa_number']);
 
-			if($reverse)
-				$data = array_reverse($data);
+			echo '<br>IP Addresses:<ul>';
 
-			foreach($data as $line){
+			foreach($data['ip_address'] as $ip_address)
+				echo '<li><a href="'.LINK.'ip_info?ip='.$ip_address. '" target="_blank">'.$ip_address.'</a></li>';
 
-				if($line == '')
-					continue;
+			echo '</ul>
+				<br>Browsers:<ul>';
 
-				//$line_data = array_merge([$line_number],explode("\t",$line));
-				$line_data = explode("\t",$line);
+				foreach($data['browser'] as $browser)
+					echo '<li>'.$browser.'</li>';
 
-				echo '<tr>';
+				echo '</ul>
+				<br>Operating Systems:<ul>';
 
-				$count = count($line_data);
-				for($i=0;$i<$count;$i++){
+				foreach($data['os'] as $os)
+					echo '<li>'.$os.'</li>';
 
-					if(COLUMNS[$i]=='IP' || COLUMNS[$i]=='User Agent')
-						continue;
-						//echo '<td><a href="'.LINK.'host_info?ip='.$line_data[$i].$ips_link_part.'">'.$line_data[$i].'</a></td>';
-					elseif(COLUMNS[$i]=='Date')
-						echo '<td>'.unix_time_to_human_time($line_data[$i]).'</td>';
-					elseif(COLUMNS[$i]=='Institution' || COLUMNS[$i]=='Discipline' || COLUMNS[$i]=='Collection')
-						echo '<td>'.urldecode($line_data[$i]).'</td>';
-					else
-						echo '<td>'.$line_data[$i].'</td>';
+				echo '</ul></li>';
 
-				}
+		}
 
-				echo '</tr>';
+		echo '</ul></li>';
 
-				$line_number++;
+	}
 
-			}
+	echo '</ul></li>';
 
-
-		} ?>
-
-	</tbody>
-</table> <?php
+}
+echo '</ol>';
 
 
 footer();
