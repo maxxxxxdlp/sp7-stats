@@ -1,7 +1,11 @@
 <?php
 
 global $user_agent;
+
+const MENU_BUTTON = 3;
 require_once('../components/menu.php');
+
+define('COLUMNS',['IP Address','Date','SP7','SP6','Institution','Discipline','Collection','Isa Number','Browser','OS']);
 
 if(!isset($current_file))
 	exit(); ?>
@@ -55,13 +59,13 @@ if(!isset($current_file))
 						echo '<td>'.unix_time_to_human_time($line_data[$i]).'</td>';
 
 					elseif(COLUMNS[$i]=='Institution')
-						echo '<td><a href="' . get_link_for_custom_get(['Institution' => $line_data[$i], 'Discipline' => '', 'Collection' => ''], FALSE, LINK . '/institutions/') . '">' . urldecode($line_data[$i]) . '</a></td>';
+						echo '<td><a href="' . get_link_for_custom_get(['Institution' => $line_data[$i], 'Discipline' => '', 'Collection' => ''], FALSE, LINK . '/institution/') . '">' . urldecode($line_data[$i]) . '</a></td>';
 
 					elseif(COLUMNS[$i]=='Discipline')
-						echo '<td><a href="'.get_link_for_custom_get(['Institution'=>$line_data[$i-1],'Discipline'=>$line_data[$i],'Collection'=>'',FALSE,LINK.'/institutions/']).'">'.urldecode($line_data[$i]).'</a></td>';
+						echo '<td><a href="'.get_link_for_custom_get(['Institution'=>$line_data[$i-1],'Discipline'=>$line_data[$i],'Collection'=>'',FALSE,LINK.'/institution/']).'">'.urldecode($line_data[$i]).'</a></td>';
 
 					elseif(COLUMNS[$i]=='Collection')
-						echo '<td><a href="'.get_link_for_custom_get(['Institution'=>$line_data[$i-2],'Discipline'=>$line_data[$i-1],'Collection'=>$line_data[$i-1],FALSE,LINK.'/institutions/']).'">'.urldecode($line_data[$i]).'</a></td>';
+						echo '<td><a href="'.get_link_for_custom_get(['Institution'=>$line_data[$i-2],'Discipline'=>$line_data[$i-1],'Collection'=>$line_data[$i-1],FALSE,LINK.'/institution/']).'">'.urldecode($line_data[$i]).'</a></td>';
 
 					else
 						echo '<td>'.$line_data[$i].'</td>';

@@ -37,10 +37,8 @@ function prepare_dir($dir,$delete_files=TRUE){
 
 		mkdir($dir);
 
-		if(!file_exists($dir)){
+		if(!file_exists($dir))
 			alert('danger','Unable to create directory <i>'.$dir.'</i>. Please check your config and permissions');
-			exit();
-		}
 		elseif(VERBOSE)
 			alert('secondary','Directory <i>'.$dir.'</i> was created successfully');
 
@@ -89,10 +87,6 @@ require_file('../components/get_raw_data.php');
 //validate result of compilation
 compile_institutions_end();
 
-#this file is not yet used
-//compile ips
-//require_file('../components/compile_ips.php');
-
 
 if($error)
 	alert('warning','There were some errors. Please review the messages above');
@@ -105,7 +99,7 @@ else {
 	if($total_lines !== FALSE)
 		$misc_file_data['total_lines'] = $total_lines;
 
-	file_put_contents(UNZIP_LOCATION.'misc.json',json_encode($misc_file_data));
+	file_put_contents(WORKING_LOCATION.'misc.json',json_encode($misc_file_data));
 	alert('success','Success!');
 
 	if(array_key_exists('referrer',$_GET))

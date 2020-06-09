@@ -7,18 +7,8 @@ global $institutions_dir;
 global $institutions2_dir;
 
 
-$institutions_dir = UNZIP_LOCATION.'institutions/';//contains some data about the institutions in each file (used on the main page)
-prepare_dir($institutions_dir);
-$institutions_dir = UNZIP_LOCATION.'institutions2/';//contains all of the data about each institution (used on the institutions page)
-prepare_dir($institutions2_dir);
-
-
-$institutions2 = [];
-$institutions3 = [];//contains brief data about all institutions
-
-$file_count = 0;
-
-//tsv_file_name.json >
+//contains some data about the institutions in each file (used on the main page)
+//institutions/(tsv_file_name).json >
 // - institution_name_urlencoded
 //   - discipline_name_urlencoded
 //     - collection_name_urlencoded
@@ -34,10 +24,42 @@ $file_count = 0;
 //         - distinct array
 //       - os
 //         - distinct array
-//       - year
-//         - month
-//           - day
-//             - number_of_visits
+//       - count
+
+
+//contains IDs for each institution
+//institutions_ids.json
+// - institution_id
+//   - institution_name_urlencoded
+
+
+//contains all of the data about each institution (used on the institutions page)
+//institutions2/(institution_id).json
+// - discipline_name_urlencoded
+//   - collection_name_urlencoded
+//     - year
+//       - month
+//         - day
+//           - count
+
+//contains brief information about each institution
+//institutions.json
+// - institution_name_urlencoded
+//   - discipline_name_urlencoded
+//     - collection_name_urlencoded
+//       - count
+
+
+$institutions_dir = WORKING_LOCATION.'institutions/';
+prepare_dir($institutions_dir);
+$institutions2_dir = WORKING_LOCATION.'institutions2/';
+prepare_dir($institutions2_dir);
+
+
+$institutions2 = [];
+$institutions3 = [];//contains brief data about all institutions
+
+$file_count = 0;
 
 $ips = [];
 
@@ -81,72 +103,70 @@ function compile_institutions($lines_data, $file_name){
 		if(!array_key_exists('sp7_version', $result_data[$institution][$discipline][$collection]))
 			$result_data[$institution][$discipline][$collection]['sp7_version'] = [];
 
-		//if(array_search($sp7_version,$result_data[$institution][$discipline][$collection]['sp7_version']) === FALSE)
 		$result_data[$institution][$discipline][$collection]['sp7_version'][] = $sp7_version;
 
 		//sp6
 		if(!array_key_exists('sp6_version', $result_data[$institution][$discipline][$collection]))
 			$result_data[$institution][$discipline][$collection]['sp6_version'] = [];
 
-		//if(array_search($sp6_version,$result_data[$institution][$discipline][$collection]['sp6_version']) === FALSE)
 		$result_data[$institution][$discipline][$collection]['sp6_version'][] = $sp6_version;
 
 		//isa_number
 		if(!array_key_exists('isa_number', $result_data[$institution][$discipline][$collection]))
 			$result_data[$institution][$discipline][$collection]['isa_number'] = [];
 
-		if($isa_number != ''/* && array_search($isa_number,$result_data[$institution][$discipline][$collection]['isa_number']) === FALSE*/)
+		if($isa_number != '')
 			$result_data[$institution][$discipline][$collection]['isa_number'][] = $isa_number;
 
 		//ip_address
 		if(!array_key_exists('ip_address', $result_data[$institution][$discipline][$collection]))
 			$result_data[$institution][$discipline][$collection]['ip_address'] = [];
 
-		//if(array_search($ip_address,$result_data[$institution][$discipline][$collection]['ip_address']) === FALSE)
 		$result_data[$institution][$discipline][$collection]['ip_address'][] = $ip_address;
 
 		//browser
 		if(!array_key_exists('browser', $result_data[$institution][$discipline][$collection]))
 			$result_data[$institution][$discipline][$collection]['browser'] = [];
 
-		//if(array_search($browser,$result_data[$institution][$discipline][$collection]['browser']) === FALSE)
 		$result_data[$institution][$discipline][$collection]['browser'][] = $browser;
 
 		//os
 		if(!array_key_exists('os', $result_data[$institution][$discipline][$collection]))
 			$result_data[$institution][$discipline][$collection]['os'] = [];
 
-		//if(array_search($os,$result_data[$institution][$discipline][$collection]['os']) === FALSE)
 		$result_data[$institution][$discipline][$collection]['os'][] = $os;
 
 
+		//year
 		$year = date(YEAR_FORMATTER, $unix_time);
-		if(!array_key_exists('year', $result_data[$institution][$discipline][$collection]))
-			$result_data[$institution][$discipline][$collection]['year'] = [];
+		if(!array_key_exists('dates', $result_data[$institution][$discipline][$collection]))
+			$result_data[$institution][$discipline][$collection]['dates'] = [];
 
-		if(!array_key_exists($year, $result_data[$institution][$discipline][$collection]['year']))
-			$result_data[$institution][$discipline][$collection]['year'][$year] = [];
+		if(!array_key_exists($year, $result_data[$institution][$discipline][$collection]['dates']))
+			$result_data[$institution][$discipline][$collection]['dates'][$year] = [];
 
 		//month
 		$month = date(MONTH_FORMATTER, $unix_time);
-		if(!array_key_exists('month', $result_data[$institution][$discipline][$collection]))
-			$result_data[$institution][$discipline][$collection]['month'] = [];
-
-		if(!array_key_exists($month, $result_data[$institution][$discipline][$collection]['month']))
-			$result_data[$institution][$discipline][$collection]['month'][$month] = [];
+		if(!array_key_exists($month, $result_data[$institution][$discipline][$collection]['dates'][$year]))
+			$result_data[$institution][$discipline][$collection]['dates'][$year][$month] = [];
 
 		//day
-		$day = date(MONTH_FORMATTER, $unix_time);
-		if(!array_key_exists('day', $result_data[$institution][$discipline][$collection]))
-			$result_data[$institution][$discipline][$collection]['day'] = [];
-
-		if(!array_key_exists($day, $result_data[$institution][$discipline][$collection]['day']))
-			$result_data[$institution][$discipline][$collection]['day'][$day] = 1;
+		$day = date(DAY_FORMATTER, $unix_time);
+		if(!array_key_exists($day, $result_data[$institution][$discipline][$collection]['dates'][$year][$month]))
+			$result_data[$institution][$discipline][$collection]['dates'][$year][$month][$day] = 1;
 		else
-			$result_data[$institution][$discipline][$collection]['day'][$day]++;
+			$result_data[$institution][$discipline][$collection]['dates'][$year][$month][$day]++;
+
+		//count
+		if(!array_key_exists('count',$result_data[$institution][$discipline][$collection]))
+			$result_data[$institution][$discipline][$collection]['count']=1;
+		else
+			$result_data[$institution][$discipline][$collection]['count']++;
 
 
 	}
+
+
 
 	foreach($result_data as $institution => &$discipline_data){//add data to institutions2 and institutions3
 
@@ -170,9 +190,9 @@ function compile_institutions($lines_data, $file_name){
 					$institutions2[$institution][$discipline][$collection] = [];
 
 				if(!array_key_exists($collection,$institutions3[$institution][$discipline]))
-					$institutions3[$institution][$discipline][$collection] = 1;
+					$institutions3[$institution][$discipline][$collection] = $data['count'];
 				else
-					$institutions3[$institution][$discipline][$collection]++;
+					$institutions3[$institution][$discipline][$collection] += $data['count'];
 
 
 				//sort arrays and make them distinct
@@ -201,26 +221,28 @@ function compile_institutions($lines_data, $file_name){
 
 
 				//move year,month,day usage data from institutions to institutions2
-
-				foreach($data['year'] as $year => $month_data){
+				foreach($data['dates'] as $year=>$month_data){
 
 					if(!array_key_exists($year,$institutions2[$institution][$discipline][$collection]))
 						$institutions2[$institution][$discipline][$collection][$year] = [];
 
-					foreach($month_data as $month => $day_data){
+					foreach($month_data as $month=>$day_data){
 
 						if(!array_key_exists($month,$institutions2[$institution][$discipline][$collection][$year]))
 							$institutions2[$institution][$discipline][$collection][$year][$month] = [];
 
-						foreach($day_data as $day => $count)
+						foreach($day_data as $day=>$count){
+
 							if(!array_key_exists($day,$institutions2[$institution][$discipline][$collection][$year][$month]))
 								$institutions2[$institution][$discipline][$collection][$year][$month][$day] = $count;
+							else
+								$institutions2[$institution][$discipline][$collection][$year][$month][$day] += $count;
+
+						}
 
 					}
 
 				}
-
-				unset($data['year']);
 
 			}
 
@@ -254,17 +276,80 @@ function compile_institutions_end(){
 	if($institutions_count>0)
 		alert('info','Extracted information about '.$institutions_count.' institutions from '.$file_count.' files');
 
+
+	function sort_months($x,$y){
+		static $months_names = [
+			'January',
+			'February',
+			'March',
+			'April',
+			'May',
+			'June',
+			'July',
+			'August',
+			'September',
+			'October',
+			'November',
+			'December',
+		];
+		return array_search($x,$months_names)>array_search($y,$months_names);
+	}
+
 	$i=0;
 	$institutions4 = [];//list of institutions and their IDs
-	foreach($institutions2 as $institution => $institution_data){
+	foreach($institutions2 as $institution => &$discipline_data){
+
+		foreach($discipline_data as $discipline => &$collection_data)
+
+			foreach($collection_data as $collection => &$data){
+
+				ksort($data);
+
+				$months = [];
+				$days = [];
+				foreach($data as $year => $month_data){
+
+					uksort($month_data,'sort_months');
+
+					$months[$year] = [[],[]];
+					$days[$year] = [];
+
+					foreach($month_data as $month => &$day_data){
+
+						$days[$year][$month] = [[],[]];
+
+						$month_sum = 0;
+						$keys = array_keys($day_data);
+
+						array_multisort($keys, SORT_NATURAL | SORT_FLAG_CASE, $day_data);
+
+						foreach($day_data as $day => $day_sum){
+
+							$days[$year][$month][0][] = $day;
+							$days[$year][$month][1][] = $day_sum;
+
+							$month_sum += $day_sum;
+
+						}
+
+						$months[$year][0][] = $month;
+						$months[$year][1][] = $month_sum;
+
+					}
+
+				}
+
+				$data = [$months,$days];
+
+			}
 
 		$institutions4[$i]=$institution;
-		file_put_contents($institutions2_dir.$i.'.json',json_encode($institution_data));
+		file_put_contents($institutions2_dir.$i.'.json',json_encode($discipline_data));
 		$i++;
 
 	}
 
-	file_put_contents(UNZIP_LOCATION.'institutions_ids.json',json_encode($institutions4));
-	file_put_contents(UNZIP_LOCATION.'institutions.json',json_encode($institutions3));
+	file_put_contents(WORKING_LOCATION.'institutions_id.json',json_encode($institutions4));
+	file_put_contents(WORKING_LOCATION.'institutions.json',json_encode($institutions3));
 
 }
