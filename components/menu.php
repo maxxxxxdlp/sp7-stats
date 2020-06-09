@@ -9,18 +9,23 @@ $real_link = LINK.substr($_SERVER['REQUEST_URI'],1);
 
 
 
-function get_link_for_custom_get($GET,$trailing_symbol=FALSE){
+function get_link_for_custom_get($GET,$trailing_symbol=FALSE,$origin_link=NULL){
 
 	static $get_less_link='';
 
 	if($get_less_link == ''){
+
 		$get_less_link = $_SERVER['PHP_SELF'];
 		$get_less_link = str_replace('index.php', '', $get_less_link);
 		$get_less_link = substr($get_less_link, 1);
 		$get_less_link = LINK . $get_less_link . '?';
+
 	}
 
-	$link = $get_less_link;
+	if($origin_link)
+		$link = $origin_link;
+	else
+		$link = $get_less_link;
 
 	foreach($GET as $key => $value)
 		if($value=='')
@@ -78,7 +83,7 @@ function unix_time_to_human_time($time){
 	else
 		$result = intval($time_passed/86400).' days ago';
 
-	return preg_replace('/(1 \w+)s( ago)/','$1$2',$result);
+	return preg_replace('/^(1 \w+)s( ago)/','$1$2',$result);
 
 }
 
@@ -101,7 +106,7 @@ $files = glob(UNZIP_LOCATION.'tsv/*.tsv');
 $files = array_reverse($files); ?>
 
 <a
-	href="refresh_data/?referrer=<?=$real_link?>"
+	href="<?=LINK?>refresh_data/?referrer=<?=$real_link?>"
 	class="btn btn-success"
 	id="refresh"
 	target="_blank">Refresh Data</a><br><br> <?php
@@ -121,6 +126,8 @@ if($misc['total_lines']==0){
 		else
 			$current_file = FALSE;
 
+		$first_unix_begin = NULL;
+
 		foreach($files as $file){
 
 			$file = explode('/',$file);
@@ -132,13 +139,16 @@ if($misc['total_lines']==0){
 
 			$selected_append = '';
 
+			if(!$first_unix_begin)
+				$first_unix_begin = $unix_begin;
+
 			if(!$current_file)
 				$current_file = $file;
 
 			if($file==$current_file)
 				$selected_append = 'selected'; ?>
 
-			<option name="<?=$file?>" <?=$selected_append?>><?=$unix_begin?> - <?=$unix_end?></option> <?php
+			<option value="<?=$file?>" <?=$selected_append?>><?=$unix_begin?> - <?=$unix_end?></option> <?php
 
 		} ?>
 
@@ -146,14 +156,15 @@ if($misc['total_lines']==0){
 </label><br>
 
 <script>
-	const current_file = '<?=$current_file?>';
-	const link = '<?=$real_link?>';
-	const file_less_link = '<?=$file_less_link?>';
+	const current_file = '<?=$current_file?>';//the value of $_GET['file']
+	const link = '<?=$real_link?>';//the URL of this page
+	const file_less_link = '<?=$file_less_link?>';//the URL of this page without $_GET['file']
+	const link_const = '<?=LINK?>';//the LINK const from PHP
 </script>  <?php
 
-if(strtotime($unix_begin)>SHOW_DATA_OUT_OF_DATE_WARNING_AFTER && $info_message_level=='info'){ ?>
+if(strtotime($first_unix_begin)>SHOW_DATA_OUT_OF_DATE_WARNING_AFTER && $info_message_level=='info'){ ?>
 	<script>
-		$('#last_refresh_alert')[0].outerHTML += '<div class="alert alert-danger">We have not received any new log files since <?=$unix_begin?>. Make sure `FILES_LOCATION` is set correctly to your Nginx\'s log directory</div>';
+		$('#last_refresh_alert')[0].outerHTML += '<div class="alert alert-danger">We have not received any new log files since <?=$first_unix_begin?>. Make sure `FILES_LOCATION` is set correctly to your Nginx\'s log directory</div>';
 	</script> <?php
 }
 

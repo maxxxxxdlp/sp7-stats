@@ -35,9 +35,10 @@ foreach($files as $file){
 
 		foreach($dates as $unix){
 
-			$month = date('F',$unix);
-			$day = date('j D',$unix);
-			$year = date('Y',$unix);
+
+			$day = date(DAY_FORMATTER,$unix);
+			$month = date(MONTH_FORMATTER,$unix);
+			$year = date(YEAR_FORMATTER,$unix);
 
 
 			if(!array_key_exists($year,$per_day))

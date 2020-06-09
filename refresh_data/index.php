@@ -31,7 +31,7 @@ function alert($status,$message){
 
 }
 
-function prepare_dir($dir){
+function prepare_dir($dir,$delete_files=TRUE){
 
 	if(!file_exists($dir)){
 
@@ -45,7 +45,7 @@ function prepare_dir($dir){
 			alert('secondary','Directory <i>'.$dir.'</i> was created successfully');
 
 	} // Create target directory
-	else { // Delete everything from that directory if not empty
+	elseif($delete_files) { // Delete everything from that directory if not empty
 
 		$files = glob($dir.'*.*');
 		$files_count = count($files);
@@ -73,9 +73,25 @@ function prepare_dir($dir){
 $total_lines = FALSE;
 
 
+
+//unzip all files
 require_file('../components/unzip.php');
+
+//include compile_institutions function
+require_file('../components/compile_institutions.php');
+
+//prepare to fetch information about user agent strings
+require_file('../components/fetch_user_agent_strings_info.php');
+
+//parse each file, run compile_institutions on them and run get_data_for_user_agent_string
 require_file('../components/get_raw_data.php');
-require_file('../components/compile_data.php');
+
+//validate result of compilation
+compile_institutions_end();
+
+#this file is not yet used
+//compile ips
+//require_file('../components/compile_ips.php');
 
 
 if($error)
@@ -98,7 +114,7 @@ else {
 		$referrer = LINK;
 
 	if(!$no_gui)
-		alert('info','<a href="'.$referrer.'">Click here to go back to go back</a>');
+		alert('info','<a href="'.$referrer.'">Click here to go back</a>');
 
 }
 
