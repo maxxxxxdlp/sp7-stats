@@ -21,10 +21,7 @@ if(LOG_IPS)
 error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 1);
 
-if(defined('TIMEZONE'))
-	date_default_timezone_set(TIMEZONE);
-else
-	date_default_timezone_set('America/Chicago');
+date_default_timezone_set('America/Chicago');
 
 if(!defined('NO_HEAD')){
 

@@ -9,7 +9,7 @@ if(!array_key_exists('user_agent',$_GET))
 $user_agent = urldecode($_GET['user_agent']);
 
 $user_agent_data = json_decode(file_get_contents(LINK.'components/compile_user_agent_strings.php?user_agent='.urlencode($user_agent)),TRUE);
-if(!is_array($user_agent_data) || count($user_agent_data)<2){
+if(!is_array($user_agent_data) || count($user_agent_data)<2 || $user_agent_data[1]==''){
 	$browser = 'Browser';
 	$os = 'OS';
 }
