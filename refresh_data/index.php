@@ -2,6 +2,8 @@
 
 require_once('../components/header.php');
 
+date_default_timezone_set('UTC');
+
 $no_gui_separator = "<br>\n";
 
 $error = FALSE;
@@ -64,19 +66,28 @@ function prepare_dir($dir,$delete_files=TRUE){
 
 $total_lines = FALSE;
 
+//prepare to extract data
+require_once('../components/raw_data.php');
 
-
-//unzip all files
-require_once('../components/unzip.php');
-
-//include compile_institutions function
+//prepare to compile institutions
 require_once('../components/institutions.php');
 
 //prepare to fetch information about user agent strings
 require_once('../components/user_agent_strings.php');
 
-//parse each file, run compile_institutions on them and run get_data_for_user_agent_string
-require_once('../components/raw_data.php');
+//memory management
+//ini_set('memory_limit','32M');
+unset($_GET,$_POST,$_FILES,$_SERVER,$_COOKIE);
+
+//unzip all files
+//run extract_data on each file
+//run compile_institutions on each resulting file
+//run get_data_for_user_agent_string and save new strings
+require_once('../components/unzip.php');
+
+
+
+finish_data_extraction();
 
 //validate result of compilation and save institutions
 compile_institutions_end();
@@ -97,3 +108,7 @@ else {
 	alert('success','Success!');
 
 }
+
+alert('info','Current RAM usage: '.round(memory_get_usage()/1024/1024,2).
+	'MB<br>Max RAM usage: '.round(memory_get_peak_usage()/1024/1024,2).
+	'MB<br>RAM usage limit: '.ini_get('memory_limit'));

@@ -1,5 +1,7 @@
 <?php
 
+//TODO: test time zones
+
 function require_file($require){
 
 	require_once(dirname(__FILE__).'/'.$require);
@@ -11,8 +13,6 @@ require_file('../config.php');
 
 error_reporting(E_ALL | E_STRICT);//TODO: remove these lines
 ini_set('display_errors', 1);
-
-date_default_timezone_set('America/Chicago');
 
 function head(){
 

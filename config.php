@@ -24,9 +24,9 @@ const IPS_TO_EXCLUDE = [
 
 
 
-# If data was not refreshed for this many days, the user would get a reminder to refresh data
-# Also, if no new records were coming after this many days, an error message would be shown
-define('SHOW_DATA_OUT_OF_DATE_WARNING_AFTER',1);
+# If data was not refreshed for this much time, the user would get a reminder to refresh data
+# Also, if no new records were coming after this much time, an error message would be shown
+define('SHOW_DATA_OUT_OF_DATE_WARNING_AFTER',86400);//one day
 
 
 
@@ -59,8 +59,3 @@ define('DAY_FORMATTER','j D');
 # 00 - Shows list only. Table view is not available
 # 11 - Shows table view only. List view is not available
 define('MAIN_PAGE_OUTPUT_FORMAT','0');
-
-
-
-# You can set $GLOBALS['extra_html'] before including header.php or main.php
-# to specify extra code that should be included in the <head>

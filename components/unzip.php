@@ -1,19 +1,14 @@
 <?php
 
 global $file_count;
-global $target_dir;
-
-$target_dir = WORKING_LOCATION.'unzipped/';
-prepare_dir($target_dir);
-
 
 function handle_gz($file_name){
 
 	global $file_count;
-	global $target_dir;
 
 	$out_file_name = str_replace('.gz', '', $file_name);
 
+	//var_dump(get_defined_vars());
 	$data = gzdecode(file_get_contents(FILES_LOCATION.$file_name));
 
 	if (!$data){
@@ -24,7 +19,7 @@ function handle_gz($file_name){
 	if(VERBOSE)
 		alert('secondary', $file_name.' was successfully unzipped to '.$out_file_name.'</div>');
 
-	file_put_contents($target_dir.$out_file_name,$data);
+	extract_data($data);
 
 	$file_count++;
 
@@ -34,17 +29,9 @@ function handle_gz($file_name){
 function handle_log($file_name){
 
 	global $file_count;
-	global $target_dir;
 
-	copy(FILES_LOCATION.$file_name,$target_dir.$file_name);
-
-	if(!file_exists($target_dir.$file_name)){
-		alert('danger','Unable to copy <i>'.$file_name.'</i> from <b>'.FILES_LOCATION.'</b> to <b>'.$target_dir.'</b>');
-		return;
-	}
-
-	if(VERBOSE)
-		alert('secondary','<i>'.$file_name.'</i> was successfully copied to <b>'.FILES_LOCATION.'</b> to <b>'.$target_dir.'</b>');
+	$data = file_get_contents(FILES_LOCATION.$file_name);
+	extract_data($data);
 
 	$file_count++;
 
