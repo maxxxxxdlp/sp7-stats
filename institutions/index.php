@@ -1,6 +1,5 @@
 <?php
 
-$menu_link = 2;
 require_once('../components/menu.php');
 
 $file_path = WORKING_LOCATION.'institutions.json';

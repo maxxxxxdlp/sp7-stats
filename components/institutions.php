@@ -1,7 +1,5 @@
 <?php
 
-global $ips;
-global $institutions2;
 global $institutions3;
 global $institutions_dir;
 global $institutions2_dir;
@@ -55,29 +53,22 @@ prepare_dir($institutions_dir);
 $institutions2_dir = WORKING_LOCATION.'institutions2/';
 prepare_dir($institutions2_dir);
 
-
-$institutions2 = [];
 $institutions3 = [];//contains brief data about all institutions
 
 $file_count = 0;
 
-$ips = [];
-
 function compile_institutions($lines_data, $file_name){
 
-	global $file_count;
-	global $ips;
-	global $institutions2;
 	global $institutions3;
 	global $institutions_dir;
 
 
 	$result_data = [];
+	$cols = ['sp7_version','sp6_version','isa_number','ip_address','browser','os'];
 
 	foreach($lines_data as $line_data){
 
 		$ip_address = $line_data['ip'];
-		$unix_time = $line_data['date'];
 		$sp7_version = $line_data['version'];
 		$sp6_version = $line_data['dbVersion'];
 		$institution = $line_data['institution'];
@@ -99,67 +90,20 @@ function compile_institutions($lines_data, $file_name){
 		if(!array_key_exists($collection, $result_data[$institution][$discipline]))
 			$result_data[$institution][$discipline][$collection] = [];
 
-		//sp7
-		if(!array_key_exists('sp7_version', $result_data[$institution][$discipline][$collection]))
-			$result_data[$institution][$discipline][$collection]['sp7_version'] = [];
 
-		$result_data[$institution][$discipline][$collection]['sp7_version'][] = $sp7_version;
+		foreach($cols as $col){
 
-		//sp6
-		if(!array_key_exists('sp6_version', $result_data[$institution][$discipline][$collection]))
-			$result_data[$institution][$discipline][$collection]['sp6_version'] = [];
+			if(!array_key_exists($col, $result_data[$institution][$discipline][$collection]))
+				$result_data[$institution][$discipline][$collection][$col] = [];
 
-		$result_data[$institution][$discipline][$collection]['sp6_version'][] = $sp6_version;
+			if($$col!='' && array_search($$col,$result_data[$institution][$discipline][$collection][$col])===FALSE)
+				$result_data[$institution][$discipline][$collection][$col][] = $$col;
 
-		//isa_number
-		if(!array_key_exists('isa_number', $result_data[$institution][$discipline][$collection]))
-			$result_data[$institution][$discipline][$collection]['isa_number'] = [];
-
-		if($isa_number != '')
-			$result_data[$institution][$discipline][$collection]['isa_number'][] = $isa_number;
-
-		//ip_address
-		if(!array_key_exists('ip_address', $result_data[$institution][$discipline][$collection]))
-			$result_data[$institution][$discipline][$collection]['ip_address'] = [];
-
-		$result_data[$institution][$discipline][$collection]['ip_address'][] = $ip_address;
-
-		//browser
-		if(!array_key_exists('browser', $result_data[$institution][$discipline][$collection]))
-			$result_data[$institution][$discipline][$collection]['browser'] = [];
-
-		$result_data[$institution][$discipline][$collection]['browser'][] = $browser;
-
-		//os
-		if(!array_key_exists('os', $result_data[$institution][$discipline][$collection]))
-			$result_data[$institution][$discipline][$collection]['os'] = [];
-
-		$result_data[$institution][$discipline][$collection]['os'][] = $os;
+		}
 
 
-		//year
-		$year = date(YEAR_FORMATTER, $unix_time);
-		if(!array_key_exists('dates', $result_data[$institution][$discipline][$collection]))
-			$result_data[$institution][$discipline][$collection]['dates'] = [];
-
-		if(!array_key_exists($year, $result_data[$institution][$discipline][$collection]['dates']))
-			$result_data[$institution][$discipline][$collection]['dates'][$year] = [];
-
-		//month
-		$month = date(MONTH_FORMATTER, $unix_time);
-		if(!array_key_exists($month, $result_data[$institution][$discipline][$collection]['dates'][$year]))
-			$result_data[$institution][$discipline][$collection]['dates'][$year][$month] = [];
-
-		//day
-		$day = date(DAY_FORMATTER, $unix_time);
-		if(!array_key_exists($day, $result_data[$institution][$discipline][$collection]['dates'][$year][$month]))
-			$result_data[$institution][$discipline][$collection]['dates'][$year][$month][$day] = 1;
-		else
-			$result_data[$institution][$discipline][$collection]['dates'][$year][$month][$day]++;
-
-		//count
 		if(!array_key_exists('count',$result_data[$institution][$discipline][$collection]))
-			$result_data[$institution][$discipline][$collection]['count']=1;
+			$result_data[$institution][$discipline][$collection]['count'] = 1;
 		else
 			$result_data[$institution][$discipline][$collection]['count']++;
 
@@ -167,80 +111,91 @@ function compile_institutions($lines_data, $file_name){
 	}
 
 
+	$file_name = $institutions_dir.$file_name.'.json';
+	file_put_contents($file_name,json_encode($result_data));
 
-	foreach($result_data as $institution => &$discipline_data){//add data to institutions2 and institutions3
 
-		if(!array_key_exists($institution,$institutions2))
-			$institutions2[$institution] = [];
+	if(!file_exists($file_name))
+		alert('danger','Failed to create <i>'.$file_name.'</i>');
+	elseif(VERBOSE)
+		alert('secondary','<i>'.$file_name.'</i> was successfully created');
+
+	foreach($result_data as $institution => $discipline_data){//add data to  institutions3
 
 		if(!array_key_exists($institution,$institutions3))
 			$institutions3[$institution] = [];
 
-		foreach($discipline_data as $discipline => &$collection_data){
-
-			if(!array_key_exists($discipline,$institutions2[$institution]))
-				$institutions2[$institution][$discipline] = [];
+		foreach($discipline_data as $discipline => $collection_data){
 
 			if(!array_key_exists($discipline,$institutions3[$institution]))
 				$institutions3[$institution][$discipline] = [];
 
-			foreach($collection_data as $collection => &$data){
-
-				if(!array_key_exists($collection,$institutions2[$institution][$discipline]))
-					$institutions2[$institution][$discipline][$collection] = [];
+			foreach($collection_data as $collection => $data)
 
 				if(!array_key_exists($collection,$institutions3[$institution][$discipline]))
 					$institutions3[$institution][$discipline][$collection] = $data['count'];
 				else
 					$institutions3[$institution][$discipline][$collection] += $data['count'];
 
+		}
 
-				//sort arrays and make them distinct
+	}
 
-				//sp7_version
-				$data['sp7_version'] = array_unique($data['sp7_version']);
-				natsort($data['sp7_version']);
-
-				//sp6_version
-				$data['sp6_version'] = array_unique($data['sp6_version']);
-				natsort($data['sp6_version']);
-
-				//isa_number
-				$data['isa_number'] = array_unique($data['isa_number']);
-				natsort($data['isa_number']);
-
-				//ip_address
-				$data['ip_address'] = array_unique($data['ip_address']);
-				$ips = array_merge($ips, $data['ip_address']);
-
-				//browser
-				$data['browser'] = array_unique($data['browser']);
-
-				//os
-				$data['os'] = array_unique($data['os']);
+}
 
 
-				//move year,month,day usage data from institutions to institutions2
-				foreach($data['dates'] as $year=>$month_data){
+function compile_institutions_end(){
+
+	global $institutions3;
+	global $institutions_dir;
+	global $institutions2_dir;
+
+
+	$institutions2 = [];
+
+	$files = glob($institutions_dir.'*.json');
+	$file_count = count($files);
+
+	foreach($files as $file){
+
+		$unix_day = explode('/',$file);
+		$unix_day = end($unix_day);
+		$unix_day = explode('.',$unix_day);
+		$unix_day = $unix_day[0];
+
+		$unix_time = $unix_day*86400;
+		$year = date(YEAR_FORMATTER, $unix_time);
+		$month = date(MONTH_FORMATTER, $unix_time);
+		$day = date(DAY_FORMATTER, $unix_time);
+
+		$file_data = json_decode(file_get_contents($file),true);
+
+		foreach($file_data as $institution => &$discipline_data){//add data to institutions2
+
+			if(!array_key_exists($institution,$institutions2))
+				$institutions2[$institution] = [];
+
+			foreach($discipline_data as $discipline => &$collection_data){
+
+				if(!array_key_exists($discipline,$institutions2[$institution]))
+					$institutions2[$institution][$discipline] = [];
+
+				foreach($collection_data as $collection => &$data){
+
+					if(!array_key_exists($collection,$institutions2[$institution][$discipline]))
+						$institutions2[$institution][$discipline][$collection] = [];
 
 					if(!array_key_exists($year,$institutions2[$institution][$discipline][$collection]))
 						$institutions2[$institution][$discipline][$collection][$year] = [];
 
-					foreach($month_data as $month=>$day_data){
+					if(!array_key_exists($month,$institutions2[$institution][$discipline][$collection][$year]))
+						$institutions2[$institution][$discipline][$collection][$year][$month] = [];
 
-						if(!array_key_exists($month,$institutions2[$institution][$discipline][$collection][$year]))
-							$institutions2[$institution][$discipline][$collection][$year][$month] = [];
+					if(!array_key_exists($day,$institutions2[$institution][$discipline][$collection][$year][$month]))
+						$institutions2[$institution][$discipline][$collection][$year][$month][$day] = $data['count'];
 
-						foreach($day_data as $day=>$count){
-
-							if(!array_key_exists($day,$institutions2[$institution][$discipline][$collection][$year][$month]))
-								$institutions2[$institution][$discipline][$collection][$year][$month][$day] = $count;
-							else
-								$institutions2[$institution][$discipline][$collection][$year][$month][$day] += $count;
-
-						}
-
-					}
+					else
+						$institutions2[$institution][$discipline][$collection][$year][$month][$day] += $data['count'];
 
 				}
 
@@ -248,28 +203,9 @@ function compile_institutions($lines_data, $file_name){
 
 		}
 
+		file_put_contents($file,json_encode($file_data));
+
 	}
-
-
-	$file_name = $institutions_dir.$file_name.'.json';
-	file_put_contents($file_name,json_encode($result_data));
-
-	if(!file_exists($file_name))
-		alert('danger','Failed to create <i>'.$file_name.'</i>');
-	elseif(VERBOSE)
-		alert('secondary','<i>'.$file_name.'</i> was successfully created');
-
-	$file_count++;
-
-}
-
-
-function compile_institutions_end(){
-
-	global $file_count;
-	global $institutions2;
-	global $institutions3;
-	global $institutions2_dir;
 
 
 	$institutions_count = count($institutions2);
@@ -314,7 +250,7 @@ function compile_institutions_end(){
 					$months[$year] = [[],[]];
 					$days[$year] = [];
 
-					foreach($month_data as $month => &$day_data){
+					foreach($month_data as $month => $day_data){
 
 						$days[$year][$month] = [[],[]];
 
