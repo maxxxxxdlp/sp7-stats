@@ -2,6 +2,10 @@
 
 function identify_data_for_user_agent_string($user_agent_string){
 
+	global $fetched_user_agent_strings_count;
+	$fetched_user_agent_strings_count++;
+
+
 	$os = '';
 	$browser = '';
 
