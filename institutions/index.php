@@ -1,7 +1,6 @@
 <?php
 
-const MENU_BUTTON = 4;
-const USE_FILES = FALSE;
+$menu_link = 2;
 require_once('../components/menu.php');
 
 $file_path = WORKING_LOCATION.'institutions.json';
@@ -21,7 +20,7 @@ foreach($institutions as $institution => $disciplines){
 		echo '<li>'.urldecode($discipline).'<ul>';
 
 		foreach($collections as $collection => $count)
-			echo '<li><a href="'.get_link_for_custom_get(['institution'=>$institution,'discipline'=>$discipline,'collection'=>$collection,'file'=>'','referrer'=>$real_link],FALSE,LINK.'/institution/?').'">'.urldecode($collection).'</a> ['.$count.']</li>';
+			echo '<li><a href="'.LINK.'institution/?institution='.$institution.'&discipline'.$discipline.'&collection'.$collection.'">'.urldecode($collection).'</a> ['.$count.']</li>';
 
 		echo '</ul></li>';
 
@@ -31,6 +30,3 @@ foreach($institutions as $institution => $disciplines){
 
 }
 echo '</ol>';
-
-
-footer();

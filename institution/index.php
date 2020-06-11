@@ -1,7 +1,5 @@
 <?php
 
-const JS = 'institution';
-const USE_FILES = FALSE;
 require_once('../components/menu.php');
 
 
@@ -9,13 +7,16 @@ if(!array_key_exists('institution',$_GET) || !array_key_exists('discipline',$_GE
 	exit('Error: invalid URL');
 
 
-$institution = urlencode(urldecode($_GET['institution']));//fix for browsers automatically encoding/decoding params in the URL
+//fix for browsers automatically encoding/decoding params in the URL
+$institution = urlencode(urldecode($_GET['institution']));
 $discipline = urlencode(urldecode($_GET['discipline']));
 $collection = urlencode(urldecode($_GET['collection']));
+
 
 $institutions_file = WORKING_LOCATION.'institution_ids.json';
 if(!file_exists($institutions_file))
 	exit('institution_ids.json does not exits. You should press the `Refresh Data` button');
+
 
 $institutions = json_decode(file_get_contents($institutions_file),true);
 $institution_id = array_search($institution,$institutions);
@@ -27,14 +28,18 @@ $institution_file = WORKING_LOCATION.'institutions2/'.$institution_id.'.json';
 if(!file_exists($institution_file))
 	exit('Failed to find the file with data for this institution. Check your URL or Refresh Data');
 $data = json_decode(file_get_contents($institution_file),true);
+
+
 if(!array_key_exists($discipline,$data))
 	exit('Discipline not found');
 
 if(!array_key_exists($collection,$data[$discipline]))
 	exit('Collection not found');
 
+
 echo '<h1>'.urldecode($institution.' > '.$discipline.' > '.$collection).'</h1><br>';
 $data = $data[$discipline][$collection]; ?>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
 
@@ -59,7 +64,4 @@ $data = $data[$discipline][$collection]; ?>
 	let days = JSON.parse('<?=json_encode($data[1])?>');
 	let months = JSON.parse('<?=json_encode($data[0])?>');
 </script>
-
-<?php
-
-footer();
+<script src="../static/js/institution.js"></script>

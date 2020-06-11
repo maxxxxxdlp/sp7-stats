@@ -46,5 +46,3 @@ $column_mapping = [
 	</tbody>
 
 </table>
-
-<?php footer();

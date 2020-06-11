@@ -6,92 +6,53 @@ function require_file($require){
 
 }
 
-function footer(){
-
-	require_file('footer.php');
-
-}
-
 require_file('../config.php');
 
-if(LOG_IPS)
-	require_file('ip_access.php');
 
-
-error_reporting(E_ALL | E_STRICT);
+error_reporting(E_ALL | E_STRICT);//TODO: remove these lines
 ini_set('display_errors', 1);
 
 date_default_timezone_set('America/Chicago');
 
-if(!defined('NO_HEAD')){
+function head(){
 
 ?><!-- Developed by Specify Software (https://www.sustain.specifysoftware.org/) -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
+	<head>
 
-	<meta charset="utf-8">
-	<title>Specify 7 Stats</title>
-	<meta
-			name="viewport"
-			content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta
-			name="author"
-			content="Specify Software">
-	<meta
-			name="theme-color"
-			content="#145a8d"/>
-	<meta
-			name="robots"
-			content="noindex,nofollow">
-	<meta
-			name="apple-mobile-web-app-title"
-			content="Specify 7 Stats">
-	<meta
-			name="application-name"
-			content="Specify 7 Stats">
-	<meta
-			name="description"
-			content="Specify 7 Stats">
-	<link
-			rel="icon"
-			type="image/png"
-			sizes="150x150"
-			href="https://sp7demofish.specifycloud.org/static/img/fav_icon.png">
-	<link
-			rel="stylesheet"
-			href="<?=LINK?>static/css/main.css"><?php
-
-	if(defined('CSS')) { ?>
+		<meta charset="utf-8">
+		<title>Specify 7 Stats</title>
+		<meta
+				name="viewport"
+				content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta
+				name="author"
+				content="Specify Software">
+		<meta
+				name="robots"
+				content="noindex,nofollow">
 		<link
-			rel="stylesheet"
-			href="<?=LINK?>static/css/<?=CSS?>.css"> <?php
-	}
-
-	if(!defined('BOOTSTRAP') || BOOTSTRAP == TRUE){ ?>
+				rel="icon"
+				type="image/png"
+				sizes="150x150"
+				href="https://sp7demofish.specifycloud.org/static/img/fav_icon.png">
+		<link
+				rel="stylesheet"
+				href="<?=LINK?>static/css/main.css">
 		<link
 				rel="stylesheet"
 				href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css"
 				integrity="sha256-aAr2Zpq8MZ+YA/D6JtRD3xtrwpEz2IqOS+pWD/7XKIw="
-				crossorigin="anonymous"/> <?php
-	}
-
-	if(defined('JQUERY') && JQUERY == TRUE){ ?>
+				crossorigin="anonymous"/>
 		<script
 				src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"
 				integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
-				crossorigin="anonymous"></script> <?php
-	}
+				crossorigin="anonymous"></script>
 
-	if(defined('JS')){ ?>
-		<script src="<?=LINK?>static/js/<?=JS?>.js"></script> <?php
-	}
-
-	if(defined('MENU_JS')){ ?>
-		<script src="<?=LINK?>static/js/menu.js"></script> <?php
-	} ?>
-
-</head>
-<body class="mb-4"> <?php
-
+	</head>
+	<body class="mb-4"> <?php
 }
+
+if(!isset($no_gui))
+	head();

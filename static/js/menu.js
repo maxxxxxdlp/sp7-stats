@@ -1,27 +1,20 @@
 $(function(){
 
-	const file_picker_select = $('#show_data_for');
-	if(file_picker_select.length!==0){
-		file_picker_select.change(function(){
+	//Refresh Time warning message
+	const last_refresh_alert = $('#last_refresh_alert');
+	const current_time = Math.floor((new Date).getTime()/1000);
+	const refresh_time = parseInt(last_refresh_alert.attr('data-refresh_date'));
 
-			const selected_file = file_picker_select.find("option:selected").attr('value');
-
-			if(current_file !== selected_file){
-
-				if(selected_file==='0')
-					window.location.href = file_less_link;
-				else
-					window.location.href = file_less_link+'file='+selected_file;
-			}
-
-		});
+	if(current_time - refresh_time > SHOW_DATA_OUT_OF_DATE_WARNING_AFTER){
+		last_refresh_alert.addClass('alert-warning');
+		last_refresh_alert.append(' You should probably refresh data now.');
 	}
+	else
+		last_refresh_alert.addClass('alert-info');
 
 
-	if(typeof menu_button !== "undefined"){
-
+	//Make correct button active
+	if(typeof menu_button !== "undefined")
 		$('#menu a:nth-child('+menu_button+')').addClass('active disabled').removeAttr('href');
-
-	}
 
 });

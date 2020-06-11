@@ -1,8 +1,10 @@
 <?php
 
-const MENU_BUTTON = 2;
+$menu_link = 2;
+$origin_link = '';
 
 require_once('components/menu.php');
+require_once('components/file_picker.php');
 
 if(!isset($current_file))
 	exit();
@@ -46,7 +48,7 @@ if($view=='0' || $view=='00') {
 
 			foreach($collections as $collection => $data){
 				echo '<li>
-					<a href="'.get_link_for_custom_get(['institution'=>$institution,'discipline'=>$discipline,'collection'=>$collection,'view'=>'','file'=>'','referrer'=>$real_link],FALSE,LINK.'institution/?').'">'.urldecode($collection).'</a> ['.$data['count'].']
+					<a href="'.LINK.'institution/?institution='.$institution.'&discipline'.$discipline.'&collection'.$collection.'">'.urldecode($collection).'</a> ['.$data['count'].']
 					<br>Specify 7 versions: ' . implode(', ', $data['sp7_version']) . '
 					<br>Specify 6 versions: ' . implode(', ', $data['sp6_version']);
 
@@ -130,7 +132,7 @@ elseif($view=='1' || $view=='11'){ ?>
 				to_cell(2,urldecode($discipline));
 
 				foreach($collections as $collection => $data){
-					to_cell(3,'<a href="'.get_link_for_custom_get(['institution'=>$institution,'discipline'=>$discipline,'collection'=>$collection,'view'=>'','file'=>'','referrer'=>$real_link],FALSE,LINK.'institution/?').'">'.urldecode($collection).'</a> ['.$data['count'].']');
+					to_cell(3,'<a href="'.LINK.'institution/?institution='.$institution.'&discipline'.$discipline.'&collection'.$collection.'">'.urldecode($collection).'</a> ['.$data['count'].']');
 					to_cell(4,'Specify 7 versions');
 					to_cell(5,implode(', ',$data['sp7_version']));
 					to_cell(4,'Specify 6 versions');
@@ -170,7 +172,4 @@ elseif($view=='1' || $view=='11'){ ?>
 
 <script>
 	const view = '<?=$view?>';
-</script><?php
-
-
-footer();
+</script>

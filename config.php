@@ -4,48 +4,29 @@
 # Address the website would be served on
 define('LINK', 'https://sp7.maxxxxxdlp.ml/');
 
-
-
 # Location to the place where all of your access.log files are located.
-# Make sure the webserver has read permissions to all the files in this folder.
+# Make sure the web server has read permissions to all the files in this folder.
 define('FILES_LOCATION','/home/ec2-user/data/Sp7-stats/');
 
 # Set this to an empty folder. This would be the destination for all uncompressed
 # access.log and other files created in the process.
-# Make sure the webserver has write permissions to this folder.
+# Make sure the web server has write permissions to this folder.
 # **Warning!** All of the files present in this directory would be deleted.
 define('WORKING_LOCATION','/home/ec2-user/data/Sp7-stats/files/');
 
 
 
-# Whether to log user IPs
-define('LOG_IPS',TRUE);
-
-# Whether to block external ips
-define('BLOCK_EXTERNAL_IPS',FALSE);
-
-# Location of a text file that contains a list of IPs that are whitelisted
-# IPs should be separated by a new line
-define('WHITELIST_IP_LOCATION','/home/ec2-user/data/whitelist_ip_list.txt');
-
-# Location of a text file that would contain a non-distinct list of IPs that were denied access to your site
-# IPs would be separated by a new line
-define('BLOCKED_IPS_LOG_LOCATION','/home/ec2-user/data/blocked_ip_list.txt');
-
-# Location of a text file that would contain a non-distinct list of IPs that were allowed access to your site
-# IPs would be separated by a new line
-define('IPS_LOG_LOCATION','/home/ec2-user/data/ip_list.txt');
+# Set a list of IPs that should be excluded from the reports
+const IPS_TO_EXCLUDE = [
+	'129.237.229.',
+	'129.237.201.',
+];
 
 
 
-# If data was not refreshed for this much time, the user would get a reminder to refresh data
-# Also, if no new records were coming after this much time, an error message would be shown
-define('SHOW_DATA_OUT_OF_DATE_WARNING_AFTER',86400);//one day
-
-# How many records to store in one file before splitting
-# Bigger values decrease performance
-# Adjust it based on how much traffic you are getting
-define('SPLIT_DATA',1000);
+# If data was not refreshed for this many days, the user would get a reminder to refresh data
+# Also, if no new records were coming after this many days, an error message would be shown
+define('SHOW_DATA_OUT_OF_DATE_WARNING_AFTER',1);
 
 
 
@@ -81,14 +62,5 @@ define('MAIN_PAGE_OUTPUT_FORMAT','0');
 
 
 
-# FOR DEVELOPMENT
-
-# You can define the following constants before including the header.php or menu.php files
-# This would allow you to customize various options
-#
-# CSS       - links a specified CSS file from the 'css' folder (extension not required) (e.x. main)
-# JS        - links a specified JS  file from the 'js'  folder (extension not required) (e.x. institutions)
-# BOOTSTRAP - whether to include Bootstrap (bool)(default = TRUE )
-# JQUERY    - whether to include jQuery    (bool)(default = FALSE)
-# NO_HEAD   - does not output the <html>, <head> tags and their content (bool)(default = FALSE)
-# MENU_JS   - whether to include `menu.js`. FALSE by default. Is set to TRUE inside of `menu.php`
+# You can set $GLOBALS['extra_html'] before including header.php or main.php
+# to specify extra code that should be included in the <head>
