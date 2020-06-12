@@ -1,6 +1,11 @@
 <?php
 
 require_once('../components/menu.php');
+require_once('../static/html/search_form.html');
+echo '<script>
+		const search_mode = \'list\'; 
+	</script>
+<script src="'.LINK.'static/js/search.js"></script>';
 
 $file_path = WORKING_LOCATION.'institutions.json';
 
@@ -19,7 +24,7 @@ foreach($institutions as $institution => $disciplines){
 		echo '<li>'.urldecode($discipline).'<ul>';
 
 		foreach($collections as $collection => $count)
-			echo '<li><a href="'.LINK.'institution/?institution='.$institution.'&discipline'.$discipline.'&collection'.$collection.'">'.urldecode($collection).'</a> ['.$count.']</li>';
+			echo '<li><a href="'.LINK.'institution/?institution='.$institution.'&discipline='.$discipline.'&collection='.$collection.'">'.urldecode($collection).'</a> ['.$count.']</li>';
 
 		echo '</ul></li>';
 
