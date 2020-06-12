@@ -113,7 +113,9 @@ function get_data_for_user_agent_string($user_agent_string=''){
 	static $data=FALSE;
 
 	if($user_agent_string=='SAVE_DATA'){
-		file_put_contents(WORKING_LOCATION.'persistent/user_agent_strings.json',json_encode($data));
+		$target_dir = WORKING_LOCATION.'persistent/';
+		prepare_dir($target_dir);
+		file_put_contents($target_dir.'user_agent_strings.json',json_encode($data));
 		return TRUE;
 	}
 

@@ -13,7 +13,7 @@ $discipline = urlencode(urldecode($_GET['discipline']));
 $collection = urlencode(urldecode($_GET['collection']));
 
 
-$institutions_file = WORKING_LOCATION.'institution_ids.json';
+$institutions_file = WORKING_LOCATION.'institutions_id.json';
 if(!file_exists($institutions_file))
 	exit('institution_ids.json does not exits. You should press the `Refresh Data` button');
 

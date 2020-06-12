@@ -55,7 +55,7 @@ if(time()-$misc['timestamp']>SHOW_DATA_OUT_OF_DATE_WARNING_AFTER){
 		id="refresh"
 		target="_blank">Refresh Data</a>
 	<a href="<?=LINK?>" class="btn btn-info">Main Page</a>
-	<a href="<?=LINK?>institutions/" class="btn btn-info">Show All Institutions</a>
+	<a href="<?=LINK?>institutions/" class="btn btn-info">Show all records</a>
 </div>
 
 <script>

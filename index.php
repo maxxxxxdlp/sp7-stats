@@ -43,8 +43,8 @@ foreach($files as $file){
 	if(!$last_day)
 		$last_day = $unix_time;
 
-	if($first_day<$last_day)
-		[$first_day,$last_day] = [$first_day,$last_day];
+	if($first_day>$last_day)
+		[$first_day,$last_day] = [$last_day,$first_day];
 
 	if($unix_time == $first_day)
 		$selected_1_append = 'selected';
@@ -65,7 +65,6 @@ foreach($files as $file){
 	$result_2 .= '<option value="'.$unix_time.'" '.$selected_2_append.'>' . $human_time . '</option>';
 
 }
-
 
 foreach($institutions as &$disciplines)
 
@@ -88,19 +87,19 @@ Show results from
 		id="show_data_begin"
 		class="form-control"><?=$result_1?></select>
 </label>
-till
+ till
 <label class="mb-4">
 	<select
 			id="show_data_end"
 			class="form-control"><?=$result_2?></select>
 </label><br> <?php
 
-
 $view = MAIN_PAGE_OUTPUT_FORMAT;
 if(array_key_exists('view',$_GET))
 	$view = $_GET['view'];
 
 if($view!=='11' && $view !=='00'){ ?>
+
 	<nav aria-label="breadcrumb">
 		<ol class="breadcrumb"> <?php
 			if($view=='0'){?>
@@ -115,8 +114,15 @@ if($view!=='11' && $view !=='00'){ ?>
 	</nav> <?php
 }
 
+require_once('static/html/search_form.html');
+echo '<script src="'.LINK.'static/js/search.js"></script>';
+
 if($view=='0' || $view=='00') {
-	echo '<ol>';
+
+	echo '<script>
+		const search_mode = \'list\'; 
+	</script>
+	<ol>';
 	foreach($institutions as $institution => $disciplines){
 
 		echo '<li>' . urldecode($institution) . '<ul>';
@@ -128,7 +134,7 @@ if($view=='0' || $view=='00') {
 			foreach($collections as $collection => $data){
 
 				echo '<li>
-					<a href="'.LINK.'institution/?institution='.$institution.'&discipline'.$discipline.'&collection'.$collection.'">'.urldecode($collection).'</a> ['.$data['count'].']
+					<a href="'.LINK.'institution/?institution='.$institution.'&discipline='.$discipline.'&collection='.$collection.'">'.urldecode($collection).'</a> ['.$data['count'].']
 					<br>Specify 7 versions: ' . implode(', ', $data['sp7_version']) . '
 					<br>Specify 6 versions: ' . implode(', ', $data['sp6_version']);
 
@@ -166,7 +172,14 @@ if($view=='0' || $view=='00') {
 	echo '</ol>';
 }
 
-elseif($view=='1' || $view=='11'){ ?>
+elseif($view=='1' || $view=='11'){  ?>
+
+	<script>
+		const search_mode = 'table';
+	</script>
+
+	<script src="<?=LINK?>static/js/search.js"></script>
+
 	<table class="table">
 		<thead>
 			<tr>
@@ -176,8 +189,7 @@ elseif($view=='1' || $view=='11'){ ?>
 				<th>Property</th>
 				<th>Value</th>
 			</tr>
-		</thead>
-		<tbody> <?php
+		</thead> <?php
 
 		$cell_count = 5;
 		function to_cell($position,$value=''){
@@ -205,6 +217,8 @@ elseif($view=='1' || $view=='11'){ ?>
 
 		foreach($institutions as $institution => $disciplines){
 
+			echo '<tbody>';
+
 			to_cell(1,urldecode($institution));
 
 			foreach($disciplines as $discipline => $collections){
@@ -212,7 +226,7 @@ elseif($view=='1' || $view=='11'){ ?>
 				to_cell(2,urldecode($discipline));
 
 				foreach($collections as $collection => $data){
-					to_cell(3,'<a href="'.LINK.'institution/?institution='.$institution.'&discipline'.$discipline.'&collection'.$collection.'">'.urldecode($collection).'</a> ['.$data['count'].']');
+					to_cell(3,'<a href="'.LINK.'institution/?institution='.$institution.'&discipline='.$discipline.'&collection='.$collection.'">'.urldecode($collection).'</a> ['.$data['count'].']');
 					to_cell(4,'Specify 7 versions');
 					to_cell(5,implode(', ',$data['sp7_version']));
 					to_cell(4,'Specify 6 versions');
@@ -242,12 +256,14 @@ elseif($view=='1' || $view=='11'){ ?>
 
 			}
 
+			echo '</tbody>';
+
 		}
 
-		to_cell(0);?>
+		to_cell(0);
 
-		</tbody>
-	</table> <?php
+	echo '</table>';
+
 } ?>
 
 <script>

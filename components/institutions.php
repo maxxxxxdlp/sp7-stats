@@ -90,6 +90,8 @@ function compile_institutions($lines_data, $file_name){
 		if(!array_key_exists($collection, $result_data[$institution][$discipline]))
 			$result_data[$institution][$discipline][$collection] = [];
 
+		if($sp7_version!=='' && $sp7_version[0]==='v')
+			$sp7_version = substr($sp7_version,1);
 
 		foreach($cols as $col){
 
