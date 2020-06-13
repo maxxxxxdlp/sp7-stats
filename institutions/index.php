@@ -39,11 +39,12 @@ if($times!=0)
 
 	} ?>
 
+<br>
 <label>
-	Hide collections that reported less than
+	Hide collections that reported fewer than
 	<input type="number" id="count" value="<?=$times?>">
 	times
-</label>
+</label><br><br>
 <div id="stats" class="alert alert-info"><?=count($institutions)?> institutions<br></div>
 <ol> <?php
 
