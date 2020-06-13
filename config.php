@@ -20,6 +20,25 @@ define('WORKING_LOCATION','/home/ec2-user/data/Sp7-stats/files/');
 const IPS_TO_EXCLUDE = [
 	'129.237.229.',
 	'129.237.201.',
+	'24.143.45.91',
+	'195.26.95.208',
+	'24.124.121.150',
+	'24.143.33.129',
+	'24.143.39.179',
+	'24.143.45.91',
+	'24.143.60.228',
+	'99.184.64.68',
+	'129.237.92.172',
+	'129.237.183.',
+	'172.58.139.',
+	'172.58.142.',
+];
+
+# Set a list of Institution Names to exclude
+const INSTITUTIONS_TO_EXCLUDE = [
+	'University of Kansas Biodiversity Institute',
+	'KU Biodiversity Institute',
+	'1',
 ];
 
 
@@ -39,13 +58,13 @@ define('VERBOSE',FALSE);
 # Specifies the value to be used if failed to extract the browser from the User-Agent String
 define('DEFAULT_BROWSER','');
 
-# Specifies the value to be used if failed to extract the os      from the User-Agent String
+# Specifies the value to be used if failed to extract the os from the User-Agent String
 define('DEFAULT_OS','');
 
 
 
 # Formatting for years, months and days when showing the usage statistics for a particular institution
-# https://www.php.net/manual/en/function.date.php
+# See more at https://www.php.net/manual/en/function.date.php
 define('YEAR_FORMATTER','Y');
 define('MONTH_FORMATTER','F');
 define('DAY_FORMATTER','j D');
