@@ -8,7 +8,6 @@ function handle_gz($file_name){
 
 	$out_file_name = str_replace('.gz', '', $file_name);
 
-	//var_dump(get_defined_vars());
 	$data = gzdecode(file_get_contents(FILES_LOCATION.$file_name));
 
 	if (!$data){

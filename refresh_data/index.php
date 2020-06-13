@@ -66,6 +66,10 @@ function prepare_dir($dir,$delete_files=TRUE){
 
 $total_lines = FALSE;
 
+//memory management
+//ini_set('memory_limit','32M');
+unset($_GET,$_POST,$_FILES,$_SERVER,$_COOKIE);
+
 //prepare to extract data
 require_once('../components/raw_data.php');
 
@@ -74,10 +78,6 @@ require_once('../components/institutions.php');
 
 //prepare to fetch information about user agent strings
 require_once('../components/user_agent_strings.php');
-
-//memory management
-//ini_set('memory_limit','32M');
-unset($_GET,$_POST,$_FILES,$_SERVER,$_COOKIE);
 
 //unzip all files
 //run extract_data on each file

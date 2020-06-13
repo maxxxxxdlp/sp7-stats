@@ -68,6 +68,9 @@ function extract_data(&$file_data){
 
 		}
 
+		if(in_array(urldecode($line_data['institution']),INSTITUTIONS_TO_EXCLUDE))
+			continue;
+
 
 		//HTTP CODE
 		$needle = ' ';

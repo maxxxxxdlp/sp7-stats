@@ -2,23 +2,23 @@
 This website provides some information on the usage of [Specify 7](https://github.com/specify/specify7).
 
 ## Requirements
-1. PHP 7.4 (older versions may work)
+1. PHP 7.2+ (older versions may work)
 1. Any Webserver
 
 ## Installation
-All settings parameters are located in `config.php`
+All configuration parameters are located in `config.php`
 
 1. Open the `config.php` file.
 1. Set `LINK` to an address the website would be served on.
-1. Set `FILES_LOCATION` location to the place where all of your access.log files are located. Make sure the webserver has read permissions to all the files in this folder.
-1. Set `WORKING_LOCATION` to an empty folder. This would be the destination for all uncompressed access.log files and other files created in the process. Make sure the webserver has to write permissions to this folder. **Warning!** All of the files present in this directory would be deleted.
-1. Configure your webserver to point to this directory.
+1. Set `FILES_LOCATION` location to the place where all of your **access.log** files are located. Make sure the webserver has **READ** permissions to all the files in this folder.
+1. Set `WORKING_LOCATION` to an empty folder. This would be the destination for all uncompressed access.log files and other files created in the process. Make sure the webserver has **READ** and **WRITE** permissions to this folder. **Warning!** All of the files present in this directory would be
+ deleted.
+1. Configure your webserver to point to the directory were this repository is saved.
 1. You can go over the other settings in the `config.php` files and see if there is anything you would like to adjust.
 
 ### Optional settings
-1. You can set up daily cron to the following location `http://<yourdomain>/cron.php`. This will automatically unzip the files and compile the information so that users can get up to date information.
+1. You can set up daily cron to the following location `http://<yourdomain>/cron/refresh_data.php`. This will automatically unzip the files and compile the information so that users can get up to date information.
 1. You can change the duration of time before compiled data is considered out of date by changing `SHOW_DATA_OUT_OF_DATE_WARNING_AFTER`. The default value is 86400 = 1 day.
-1. By default `SPLIT_DATA` is set to 2000, meaning compiled data would be split into files of 2000 lines. Increasing this value negatively affects page load performance. Adjust this value based on how much traffic you are getting.
 
 ## Credit for used resources
 There were snippets of code/files from the following resources used:
