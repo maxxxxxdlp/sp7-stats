@@ -1,7 +1,6 @@
 $(function(){
 
 	const search = $('#search');
-	const search_button = search.find('button');
 	const search_field = search.find('input');
 	let targets = null;
 
