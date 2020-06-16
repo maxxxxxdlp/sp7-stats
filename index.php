@@ -17,6 +17,22 @@ if(array_key_exists('file_2',$_GET) && file_exists($target_dir.$_GET['file_2'].$
 else
 	$last_day = FALSE;
 
+if(array_key_exists('date',$_GET)){
+	$_GET['date'] = urldecode($_GET['date']);
+
+	$date_info = date_parse_from_format(YEAR_FORMATTER.' '.MONTH_FORMATTER.' '.DAY_FORMATTER,$_GET['date']);
+
+	if(strlen($date_info['month'])==1)
+		$date_info['month'] = '0'.$date_info['month'];
+
+	if(strlen($date_info['day'])==1)
+		$date_info['day'] = '0'.$date_info['day'];
+
+	$unix_time = strtotime($date_info['month'].'/'.$date_info['day'].'/'.$date_info['year']);
+	$first_day = $last_day = intval($unix_time/86400);
+
+}
+
 $first_unix_begin = NULL;
 $result_1 = '';
 $result_2 = '';

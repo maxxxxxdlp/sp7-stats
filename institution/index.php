@@ -38,7 +38,14 @@ if(!array_key_exists($collection,$data[$discipline]))
 
 
 echo '<h1>'.urldecode($institution.' > '.$discipline.' > '.$collection).'</h1><br>';
-$data = $data[$discipline][$collection]; ?>
+$data = $data[$discipline][$collection];
+
+
+foreach($data[1] as $year => $months)
+	foreach($months as $month => $days)
+		foreach($days[0] as $day)
+			strtotime($year.' '.$month.' '.$day);
+?>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
@@ -58,10 +65,15 @@ $data = $data[$discipline][$collection]; ?>
 			id="month_select"
 			class="form-control"></select>
 </label>
-<canvas id="months_chart" width="1000" height="300"></canvas>
-<canvas id="days_chart" width="1000" height="300"></canvas>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-12 col-md-6"><canvas id="months_chart" width="1000" height="300"></canvas></div>
+		<div class="col-12 col-md-6"><canvas id="days_chart" width="1000" height="300"></canvas></div>
+	</div>
+</div>
 <script>
 	let days = JSON.parse('<?=json_encode($data[1])?>');
 	let months = JSON.parse('<?=json_encode($data[0])?>');
+	let link = '<?=LINK?>?date=';
 </script>
 <script src="../static/js/institution.js"></script>
