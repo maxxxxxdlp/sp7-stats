@@ -1,9 +1,13 @@
 <?php
 
-define('DEVELOPMENT',TRUE);
+//define('DEVELOPMENT',TRUE);
 
 # You can have different constant's values for your development and production servers
 # You can modify the code to read the value for `DEVELOPMENT` constant from some other file
+if($_SERVER['HTTP_HOST']=='biwebdbtest.nhm.ku.edu')
+	define('DEVELOPMENT',FALSE);
+else
+	define('DEVELOPMENT',TRUE);
 
 if(DEVELOPMENT){ # these settings would be used during development
 
