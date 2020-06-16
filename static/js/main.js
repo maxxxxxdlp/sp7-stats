@@ -16,4 +16,10 @@ $(function(){
 
 	}
 
+
+	//Show institution/discipline/collection count
+	const stats = $('#stats');
+	stats[0].innerHTML += discipline_count + ' disciplines<br>'+
+		collection_count + ' collections';
+
 });
