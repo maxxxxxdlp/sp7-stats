@@ -55,7 +55,6 @@ $(function(){
 		},
 	} );
 
-	year_select.change(year_change_function);
 
 	function year_change_function(){
 
@@ -66,6 +65,8 @@ $(function(){
 			month_select.append('<option value="'+months+'">'+months+'</option>');
 		});
 
+		month_select.find('option:last-child').attr('selected','selected');
+
 		month_change_function();
 
 		months_chart_object.tooltip._chart.config.data.labels = months[selected_year][0];
@@ -73,11 +74,10 @@ $(function(){
 		months_chart_object.update();
 
 	}
-
+	year_select.find('option:last-child').attr('selected','selected');
+	year_select.change(year_change_function);
 	year_change_function();
 
-
-	month_select.change(month_change_function);
 
 	function month_change_function(){
 
@@ -89,6 +89,7 @@ $(function(){
 		days_chart_object.update();
 
 	}
+	month_select.change(month_change_function);
 
 
 });
