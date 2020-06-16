@@ -103,10 +103,10 @@ if($view!=='11' && $view !=='00'){ ?>
 		<ol class="breadcrumb"> <?php
 			if($view=='0'){?>
 				<li class="breadcrumb-item active" aria-current="page">Show as list</li>
-				<li class="breadcrumb-item"><a href="<?=LINK?>?file1=<?=$first_day?>&file2=<?=$last_day?>&view=1">Show as table</a></li> <?php
+				<li class="breadcrumb-item"><a href="<?=LINK?>?file_1=<?=$first_day?>&file_2=<?=$last_day?>&view=1">Show as table</a></li> <?php
 			}
 			elseif($view=='1'){?>
-				<li class="breadcrumb-item"><a href="<?=LINK?>?file1=<?=$first_day?>&file2=<?=$last_day?>&view=0">Show as list</a></li>
+				<li class="breadcrumb-item"><a href="<?=LINK?>?file_1=<?=$first_day?>&file_2=<?=$last_day?>&view=0">Show as list</a></li>
 				<li class="breadcrumb-item active" aria-current="page">Show as table</li> <?php
 			} ?>
 		</ol>
