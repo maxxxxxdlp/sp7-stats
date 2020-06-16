@@ -2,11 +2,13 @@
 
 require_once('../components/menu.php');
 require_once('../static/html/search_form.html');
-echo '<script>
+echo '
+<script src="'.LINK.'static/js/stats.js"></script>
+<script>
 		const search_mode = \'list\'; 
 		const link = \''.LINK.'institutions/'.'\'; 
+		const search_callback = update_stats;
 	</script>
-<script src="'.LINK.'static/js/search.js"></script>
 <script src="'.LINK.'static/js/institutions.js"></script>';
 
 $file_path = WORKING_LOCATION.'institutions.json';
@@ -45,9 +47,10 @@ if($times!=0)
 	<input type="number" id="count" value="<?=$times?>">
 	times
 </label><br><br>
-<div id="stats" class="alert alert-info"><?=count($institutions)?> institutions<br></div>
+<div id="stats" class="alert alert-info"></div>
 <ol> <?php
 
+$institutions_count = count($institutions);
 $disciplines_count = 0;
 $collections_count = 0;
 $reports_count = 0;
@@ -60,7 +63,7 @@ foreach($institutions as $institution => $disciplines){
 		echo '<li>'.urldecode($discipline).'<ul>';
 
 		foreach($collections as $collection => $count){
-			echo '<li><a href="' . LINK . 'institution/?institution=' . $institution . '&discipline=' . $discipline . '&collection=' . $collection . '">' . urldecode($collection) . '</a> [' . $count . ']</li>';
+			echo '<li data-reports_count="'.$count.'"><a href="' . LINK . 'institution/?institution=' . $institution . '&discipline=' . $discipline . '&collection=' . $collection . '">' . urldecode($collection) . '</a> [' . $count . ']</li>';
 
 			$collections_count++;
 			$reports_count+=$count;
@@ -78,7 +81,8 @@ foreach($institutions as $institution => $disciplines){
 
 </ol>
 <script>
-	const disciplines_count = '<?=$disciplines_count?>';
-	const collections_count = '<?=$collections_count?>';
-	const reports_count = '<?=$reports_count?>';
+	const institution_count = '<?=$institutions_count?>';
+	const discipline_count = '<?=$disciplines_count?>';
+	const collection_count = '<?=$collections_count?>';
+	const report_count = '<?=$reports_count?>';
 </script>

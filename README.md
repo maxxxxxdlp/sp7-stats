@@ -9,7 +9,7 @@ This website provides some information on the usage of [Specify 7](https://githu
 All of the configuration parameters you must change for the site to work are located in `./config/required.php`
 Optional parameters are located in `./config/optional.php`
 
-1. Open the `./config/required.php` file.
+1. Open the `./config/required.php` file. Set `DEVELOPMENT` constant to FALSE or TRUE depending on your needs. This will affect the error reporting level as well as the values for the `LINK`,`FILES_LOCATION` and `WORKING_LOCATION` constants.
 1. Set `LINK` to an address the website would be served on.
 1. Set `FILES_LOCATION` location to the place where all of your **access.log** files are located. Make sure the webserver has **READ** permissions to all the files in this folder.
 1. Set `WORKING_LOCATION` to an empty folder. This would be the destination for all uncompressed access.log files and other files created in the process. Make sure the webserver has **READ** and **WRITE** permissions to this folder. **Warning!** All of the files present in this directory would be

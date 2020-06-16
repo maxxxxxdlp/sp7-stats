@@ -1,7 +1,5 @@
 <?php
 
-//TODO: test time zones
-
 function require_file($require){
 
 	require_once(dirname(__FILE__).'/'.$require);
@@ -12,8 +10,10 @@ require_file('../config/required.php');
 require_file('../config/optional.php');
 
 
-error_reporting(E_ALL | E_STRICT);//TODO: remove these lines
-ini_set('display_errors', 1);
+if(DEVELOPMENT){
+	error_reporting(E_ALL | E_STRICT);
+	ini_set('display_errors', 1);
+}
 
 function head(){
 

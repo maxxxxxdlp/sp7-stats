@@ -113,22 +113,24 @@ if($view!=='11' && $view !=='00'){ ?>
 	</nav> <?php
 }
 
-require_once('static/html/search_form.html');
-echo '<script src="'.LINK.'static/js/search.js"></script>'; ?>
+require_once('static/html/search_form.html'); ?>
+<script src="<?=LINK?>static/js/stats.js"></script>
+<script>
+	const search_callback = update_stats;
+</script>
+<div id="stats" class="alert alert-info"></div> <?php
 
-<div id="stats" class="alert alert-info">
-	<?=count($institutions)?> institutions<br>
-</div> <?php
+if($view=='0' || $view=='00') { ?>
 
-if($view=='0' || $view=='00') {
-
-	echo '<script>
-		const search_mode = \'list\'; 
+	<script>
+		const search_mode = 'list';
 	</script>
-	<ol>';
+	<ol> <?php
 
+	$institution_count = count($institutions);
 	$discipline_count = 0;
 	$collection_count = 0;
+	$report_count = 0;
 	foreach($institutions as $institution => $disciplines){
 
 		echo '<li>' . urldecode($institution) . '<ul>';
@@ -139,7 +141,7 @@ if($view=='0' || $view=='00') {
 
 			foreach($collections as $collection => $data){
 
-				echo '<li>
+				echo '<li data-reports_count="'.$data['count'].'">
 					<a href="'.LINK.'institution/?institution='.$institution.'&discipline='.$discipline.'&collection='.$collection.'">'.urldecode($collection).'</a> ['.$data['count'].']
 					<br>Specify 7 versions: ' . implode(', ', $data['sp7_version']) . '
 					<br>Specify 6 versions: ' . implode(', ', $data['sp6_version']);
@@ -167,6 +169,7 @@ if($view=='0' || $view=='00') {
 				echo '</ul></li><br>';
 
 				$collection_count++;
+				$report_count+=$data['count'];
 
 			}
 
@@ -179,6 +182,7 @@ if($view=='0' || $view=='00') {
 		echo '</ul></li>';
 
 	}
+
 	echo '</ol>';
 }
 
@@ -187,8 +191,6 @@ elseif($view=='1' || $view=='11'){  ?>
 	<script>
 		const search_mode = 'table';
 	</script>
-
-	<script src="<?=LINK?>static/js/search.js"></script>
 
 	<table class="table">
 		<thead>
@@ -202,7 +204,7 @@ elseif($view=='1' || $view=='11'){  ?>
 		</thead> <?php
 
 		$cell_count = 5;
-		function to_cell($position,$value=''){
+		function to_cell($position,$value='',$class=''){
 
 			global $cell_count;
 
@@ -219,26 +221,31 @@ elseif($view=='1' || $view=='11'){  ?>
 			if($last_cell==0)
 				echo '<tr>';
 
-			echo str_repeat('<td></td>',$position-$last_cell-1).'<td>'.$value.'</td>';
+			if($class!='')
+				$class = ' class="'.$class.'"';
+
+			echo str_repeat('<td></td>',$position-$last_cell-1).'<td'.$class.'>'.$value.'</td>';
 
 			$last_cell = $position;
 
 		}
 
+		$institution_count = count($institutions);
 		$discipline_count = 0;
 		$collection_count = 0;
+		$report_count = 0;
 		foreach($institutions as $institution => $disciplines){
 
 			echo '<tbody>';
 
-			to_cell(1,urldecode($institution));
+			to_cell(1,urldecode($institution),'institution');
 
 			foreach($disciplines as $discipline => $collections){
 
-				to_cell(2,urldecode($discipline));
+				to_cell(2,urldecode($discipline),'discipline');
 
 				foreach($collections as $collection => $data){
-					to_cell(3,'<a href="'.LINK.'institution/?institution='.$institution.'&discipline='.$discipline.'&collection='.$collection.'">'.urldecode($collection).'</a> ['.$data['count'].']');
+					to_cell(3,'<a data-reports_count="'.$data['count'].'" href="'.LINK.'institution/?institution='.$institution.'&discipline='.$discipline.'&collection='.$collection.'">'.urldecode($collection).'</a> ['.$data['count'].']');
 					to_cell(4,'Specify 7 versions');
 					to_cell(5,implode(', ',$data['sp7_version']));
 					to_cell(4,'Specify 6 versions');
@@ -265,6 +272,7 @@ elseif($view=='1' || $view=='11'){  ?>
 						to_cell(5,$os);
 
 					$collection_count++;
+					$report_count+=$data['count'];
 
 				}
 
@@ -291,8 +299,10 @@ elseif($view=='1' || $view=='11'){  ?>
 		$('#last_refresh_alert')[0].outerHTML += '<div class="alert alert-danger">We have not received any new log files since <?=unix_time_to_human_time($first_unix_begin)?>. Make sure `FILES_LOCATION` is set correctly to your Nginx\'s log directory</div>'; <?php
 	} ?>
 
+	const institution_count = '<?=$institution_count?>';
 	const discipline_count = '<?=$discipline_count?>';
 	const collection_count = '<?=$collection_count?>';
+	const report_count = '<?=$report_count?>';
 
 </script>
-<script src="static/js/main.js"></script>
+<script src="<?=LINK?>static/js/main.js"></script>

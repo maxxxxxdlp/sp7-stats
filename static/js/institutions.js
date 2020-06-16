@@ -7,9 +7,4 @@ $(function(){
 
 	})
 
-	const stats = $('#stats');
-	stats.append(disciplines_count+` disciplines<br>` +
-		collections_count+` collections<br>` +
-		reports_count+` reports`);
-
 });
