@@ -23,6 +23,10 @@ $result_2 = '';
 $institutions = [];
 
 
+$times = 0;
+if(array_key_exists('hide',$_GET) && is_numeric($_GET['hide']) && $_GET['hide']>0)
+	$times = intval($_GET['hide']);
+
 foreach($files as $file){
 
 	$unix_time = explode('/', $file);
@@ -65,20 +69,35 @@ foreach($files as $file){
 
 }
 
-foreach($institutions as &$disciplines)
+foreach($institutions as $institution_name => &$disciplines){
 
-	foreach($disciplines as &$collections)
+	foreach($disciplines as $discipline_name => &$collections){
 
-		foreach($collections as &$collection){
+		foreach($collections as $collection_name => &$collection){
 
-			if(is_array($collection['count']))
+			if(is_array($collection['count']))//fix array_merge_recursive creating an array out of 'count'
 				$collection['count'] = array_sum($collection['count']);
+
+			if($collection['count']<$times){
+				unset($collections[$collection_name]);
+				continue;
+			}
 
 			$cols = ['sp7_version','sp6_version','isa_number','ip_address','browser','os'];
 			foreach($cols as $col)
 				$collection[$col] = array_unique($collection[$col]);
 
-		} ?>
+		}
+
+		if(count($collections)==0)
+			unset($disciplines[$discipline_name]);
+
+	}
+
+	if(count($disciplines)==0)
+		unset($institutions[$institution_name]);
+
+} ?>
 
 Show results from
 <label class="mb-4">
@@ -114,6 +133,11 @@ if($view!=='11' && $view !=='00'){ ?>
 }
 
 require_once('static/html/search_form.html'); ?>
+<label>
+	Hide collections that reported fewer than
+	<input type="number" id="count" value="<?=$times?>">
+	times
+</label><br>
 <script src="<?=LINK?>static/js/stats.js"></script>
 <script>
 	const search_callback = update_stats;
@@ -292,7 +316,7 @@ elseif($view=='1' || $view=='11'){  ?>
 
 <script>
 
-	const link = '<?=LINK?>?view=<?=$view?>&';
+	const link = '<?=LINK?>?view=<?=$view?>&file_1=<?=$first_day?>&file_2=<?=$last_day?>&';
 	const view = '<?=$view?>'; <?php
 
 	if(time()-$first_unix_begin*86400>SHOW_DATA_OUT_OF_DATE_WARNING_AFTER){ ?>
@@ -306,3 +330,4 @@ elseif($view=='1' || $view=='11'){  ?>
 
 </script>
 <script src="<?=LINK?>static/js/main.js"></script>
+<script src="<?=LINK?>static/js/collections_hider.js" defer></script>

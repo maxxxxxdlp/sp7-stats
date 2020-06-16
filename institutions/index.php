@@ -6,7 +6,7 @@ echo '
 <script src="'.LINK.'static/js/stats.js"></script>
 <script>
 		const search_mode = \'list\'; 
-		const link = \''.LINK.'institutions/'.'\'; 
+		const link = \''.LINK.'institutions/?\'; 
 		const search_callback = update_stats;
 	</script>
 <script src="'.LINK.'static/js/institutions.js"></script>';
@@ -86,3 +86,4 @@ foreach($institutions as $institution => $disciplines){
 	const collection_count = '<?=$collections_count?>';
 	const report_count = '<?=$reports_count?>';
 </script>
+<script src="<?=LINK?>static/js/collections_hider.js" defer></script>
