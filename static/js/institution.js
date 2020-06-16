@@ -9,6 +9,9 @@ $(function(){
 	const days_chart = document.getElementById( "days_chart" ).getContext( "2d" );
 	const months_chart = document.getElementById( "months_chart" ).getContext( "2d" );
 
+	let selected_year = '';
+	let selected_month = '';
+
 	const days_chart_object = new Chart( days_chart, {
 		type : "bar",
 		data : {
@@ -22,6 +25,16 @@ $(function(){
 			} ],
 		},
 		options : {
+			responsive: true,
+			onClick: () => {
+
+				const selected_day = days_chart_object.chart.getElementAtEvent(event)[0]._model.label;
+				const parameters = selected_year+" "+selected_month+" "+selected_day;
+				const encoded_parameters = parameters.split(' ').join('+');
+
+				window.location.href = link+encoded_parameters;
+
+			},
 			scales : {
 				yAxes : [ {
 					ticks : {
@@ -45,6 +58,7 @@ $(function(){
 			} ],
 		},
 		options : {
+			responsive: true,
 			scales : {
 				yAxes : [ {
 					ticks : {
@@ -81,8 +95,8 @@ $(function(){
 
 	function month_change_function(){
 
-		const selected_year = year_select.find('option:selected').val();
-		const selected_month = month_select.find('option:selected').val();
+		selected_year = year_select.find('option:selected').val();
+		selected_month = month_select.find('option:selected').val();
 
 		days_chart_object.tooltip._chart.config.data.labels = days[selected_year][selected_month][0];
 		days_chart_object.tooltip._chart.config.data.datasets[0].data = days[selected_year][selected_month][1];
