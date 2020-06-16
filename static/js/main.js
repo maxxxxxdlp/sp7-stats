@@ -1,19 +1,14 @@
 $(function(){
 
-	//Redirect on file change
-	const file_picker_select_1 = $('#show_data_begin');
-	const file_picker_select_2 = $('#show_data_end');
+	const count = $('#count');
+	count.change(function(){
 
-	file_picker_select_1.change(onchange);
-	file_picker_select_2.change(onchange);
+		window.location.href = link+'hide='+count.val();
 
-	function onchange(){
+	});
 
-		let selected_file_1 = file_picker_select_1.find("option:selected").attr('value');
-		let selected_file_2 = file_picker_select_2.find("option:selected").attr('value');
-
-		window.location.href = link+'file_1='+selected_file_1+'&file_2='+selected_file_2;
-
-	}
+	const active_menu_button = $('#menu a:nth-child('+active_menu+')');
+	active_menu_button.addClass('active disabled');
+	active_menu_button.removeAttr('href');
 
 });

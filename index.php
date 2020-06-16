@@ -133,7 +133,7 @@ if($view!=='11' && $view !=='00'){ ?>
 }
 
 require_once('static/html/search_form.html'); ?>
-<label>
+<label class="mb-3 mt-2">
 	Hide collections that reported fewer than
 	<input type="number" id="count" value="<?=$times?>">
 	times
@@ -328,6 +328,8 @@ elseif($view=='1' || $view=='11'){  ?>
 	const collection_count = '<?=$collection_count?>';
 	const report_count = '<?=$report_count?>';
 
+	const active_menu = 2;
+
 </script>
+<script src="<?=LINK?>static/js/index.js"></script>
 <script src="<?=LINK?>static/js/main.js"></script>
-<script src="<?=LINK?>static/js/collections_hider.js" defer></script>
