@@ -1,15 +1,15 @@
 <?php
 
 require_once('../components/menu.php');
-require_once('../static/html/search_form.html');
-echo '
-<script src="'.LINK.'static/js/stats.js"></script>
+require_once('../static/html/search_form.html'); ?>
+
+<script src="<?=LINK?>static/js/stats.js"></script>
 <script>
-		const search_mode = \'list\'; 
-		const link = \''.LINK.'institutions/?\'; 
-		const search_callback = update_stats;
-	</script>
-<script src="'.LINK.'static/js/institutions.js"></script>';
+	const search_mode = 'list';
+	const link = '<?=LINK?>institutions/?';
+	const search_callback = update_stats;
+	const active_menu = 3;
+</script> <?php
 
 $file_path = WORKING_LOCATION.'institutions.json';
 
@@ -86,4 +86,4 @@ foreach($institutions as $institution => $disciplines){
 	const collection_count = '<?=$collections_count?>';
 	const report_count = '<?=$reports_count?>';
 </script>
-<script src="<?=LINK?>static/js/collections_hider.js" defer></script>
+<script src="<?=LINK?>static/js/main.js"></script>
