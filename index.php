@@ -2,7 +2,6 @@
 
 require_once('components/menu.php');
 
-
 $target_dir = WORKING_LOCATION.'institutions/';
 $target_extension = '.json';
 $files = glob($target_dir.'*'.$target_extension);
@@ -115,7 +114,11 @@ if($view!=='11' && $view !=='00'){ ?>
 }
 
 require_once('static/html/search_form.html');
-echo '<script src="'.LINK.'static/js/search.js"></script>';
+echo '<script src="'.LINK.'static/js/search.js"></script>'; ?>
+
+<div id="stats" class="alert alert-info">
+	<?=count($institutions)?> institutions<br>
+</div> <?php
 
 if($view=='0' || $view=='00') {
 
@@ -123,6 +126,9 @@ if($view=='0' || $view=='00') {
 		const search_mode = \'list\'; 
 	</script>
 	<ol>';
+
+	$discipline_count = 0;
+	$collection_count = 0;
 	foreach($institutions as $institution => $disciplines){
 
 		echo '<li>' . urldecode($institution) . '<ul>';
@@ -160,9 +166,13 @@ if($view=='0' || $view=='00') {
 
 				echo '</ul></li><br>';
 
+				$collection_count++;
+
 			}
 
 			echo '</ul></li>';
+
+			$discipline_count++;
 
 		}
 
@@ -215,6 +225,8 @@ elseif($view=='1' || $view=='11'){  ?>
 
 		}
 
+		$discipline_count = 0;
+		$collection_count = 0;
 		foreach($institutions as $institution => $disciplines){
 
 			echo '<tbody>';
@@ -252,7 +264,11 @@ elseif($view=='1' || $view=='11'){  ?>
 					foreach($data['os'] as $os)
 						to_cell(5,$os);
 
+					$collection_count++;
+
 				}
+
+				$discipline_count++;
 
 			}
 
@@ -274,6 +290,9 @@ elseif($view=='1' || $view=='11'){  ?>
 	if(time()-$first_unix_begin*86400>SHOW_DATA_OUT_OF_DATE_WARNING_AFTER){ ?>
 		$('#last_refresh_alert')[0].outerHTML += '<div class="alert alert-danger">We have not received any new log files since <?=unix_time_to_human_time($first_unix_begin)?>. Make sure `FILES_LOCATION` is set correctly to your Nginx\'s log directory</div>'; <?php
 	} ?>
+
+	const discipline_count = '<?=$discipline_count?>';
+	const collection_count = '<?=$collection_count?>';
 
 </script>
 <script src="static/js/main.js"></script>
