@@ -6,15 +6,16 @@ This website provides some information on the usage of [Specify 7](https://githu
 1. Any Webserver
 
 ## Installation
-All configuration parameters are located in `config.php`
+All of the configuration parameters you must change for the site to work are located in `./config/required.php`
+Optional parameters are located in `./config/optional.php`
 
-1. Open the `config.php` file.
+1. Open the `./config/required.php` file.
 1. Set `LINK` to an address the website would be served on.
 1. Set `FILES_LOCATION` location to the place where all of your **access.log** files are located. Make sure the webserver has **READ** permissions to all the files in this folder.
 1. Set `WORKING_LOCATION` to an empty folder. This would be the destination for all uncompressed access.log files and other files created in the process. Make sure the webserver has **READ** and **WRITE** permissions to this folder. **Warning!** All of the files present in this directory would be
  deleted.
 1. Configure your webserver to point to the directory were this repository is saved.
-1. You can go over the other settings in the `config.php` files and see if there is anything you would like to adjust.
+1. You can go over the other settings in the `./config/optional.php` file and see if there is anything you would like to adjust.
 
 ### Optional settings
 1. You can set up daily cron to the following location `http://<yourdomain>/cron/refresh_data.php`. This will automatically unzip the files and compile the information so that users can get up to date information.

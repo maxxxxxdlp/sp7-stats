@@ -8,7 +8,8 @@ function require_file($require){
 
 }
 
-require_file('../config.php');
+require_file('../config/required.php');
+require_file('../config/optional.php');
 
 
 error_reporting(E_ALL | E_STRICT);//TODO: remove these lines
