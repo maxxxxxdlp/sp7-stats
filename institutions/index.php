@@ -1,6 +1,6 @@
 <?php
 
-require_once('../components/menu.php');
+require_once('../components/heading.php');
 require_once('../static/html/search_form.html'); ?>
 
 <script src="<?=LINK?>static/js/stats.js"></script>
@@ -86,4 +86,3 @@ foreach($institutions as $institution => $disciplines){
 	const collection_count = '<?=$collections_count?>';
 	const report_count = '<?=$reports_count?>';
 </script>
-<script src="<?=LINK?>static/js/main.js"></script>

@@ -1,6 +1,6 @@
 <?php
 
-require_once('../components/menu.php');
+require_once('../components/heading.php');
 
 
 if(!array_key_exists('institution',$_GET) || !array_key_exists('discipline',$_GET) || !array_key_exists('collection',$_GET))
@@ -45,10 +45,9 @@ foreach($data[1] as $year => $months)
 	foreach($months as $month => $days)
 		foreach($days[0] as $day)
 			strtotime($year.' '.$month.' '.$day);
-?>
 
+require_once('../components/charts.php'); ?>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
 
 <label>
 	<select

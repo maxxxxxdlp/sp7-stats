@@ -1,8 +1,5 @@
 $(function(){
 
-	const backgroundColor = ["rgba(86,206,255,0.2)", "rgba(162,235,54,0.2)", "rgba(86,255,206,0.2)", "rgba(235,54,162,0.2)", "rgba(54,162,235,0.2)", "rgba(192,192,75,0.2)", "rgba(162,54,235,0.2)", "rgba(255,206,86,0.2)", "rgba(75,192,192,0.2)", "rgba(99,255,132,0.2)", "rgba(206,255,86,0.2)", "rgba(255,99,132,0.2)", "rgba(153,255,102,0.2)", "rgba(64,159,255,0.2)", "rgba(235,162,54,0.2)", "rgba(64,255,159,0.2)", "rgba(99,132,255,0.2)", "rgba(153,102,255,0.2)", "rgba(192,192,75,0.2)", "rgba(192,75,192,0.2)", "rgba(255,132,99,0.2)", "rgba(255,86,206,0.2)", "rgba(255,102,153,0.2)", "rgba(132,99,255,0.2)", "rgba(159,64,255,0.2)", "rgba(255,64,159,0.2)", "rgba(102,255,153,0.2)", "rgba(54,235,162,0.2)", "rgba(255,153,102,0.2)", "rgba(75,192,192,0.2)", "rgba(255,159,64,0.2)", "rgba(159,255,64,0.2)", "rgba(192,75,192,0.2)", "rgba(132,255,99,0.2)", "rgba(102,153,255,0.2)", "rgba(206,86,255,0.2)"];
-	const borderColor = ["rgba(86,206,255,1)", "rgba(162,235,54,1)", "rgba(86,255,206,1)", "rgba(235,54,162,1)", "rgba(54,162,235,1)", "rgba(192,192,75,1)", "rgba(162,54,235,1)", "rgba(255,206,86,1)", "rgba(75,192,192,1)", "rgba(99,255,132,1)", "rgba(206,255,86,1)", "rgba(255,99,132,1)", "rgba(153,255,102,1)", "rgba(64,159,255,1)", "rgba(235,162,54,1)", "rgba(64,255,159,1)", "rgba(99,132,255,1)", "rgba(153,102,255,1)", "rgba(192,192,75,1)", "rgba(192,75,192,1)", "rgba(255,132,99,1)", "rgba(255,86,206,1)", "rgba(255,102,153,1)", "rgba(132,99,255,1)", "rgba(159,64,255,1)", "rgba(255,64,159,1)", "rgba(102,255,153,1)", "rgba(54,235,162,1)", "rgba(255,153,102,1)", "rgba(75,192,192,1)", "rgba(255,159,64,1)", "rgba(159,255,64,1)", "rgba(192,75,192,1)", "rgba(132,255,99,1)", "rgba(102,153,255,1)", "rgba(206,86,255,1)"];
-
 	const year_select = $('#year_select');
 	const month_select = $('#month_select');
 
@@ -12,62 +9,19 @@ $(function(){
 	let selected_year = '';
 	let selected_month = '';
 
-	const days_chart_object = new Chart( days_chart, {
-		type : "bar",
-		data : {
-			labels : [],
-			datasets : [ {
-				label : "Sessions per day",
-				data : [],
-				backgroundColor : backgroundColor,
-				borderColor : borderColor,
-				borderWidth : 1,
-			} ],
-		},
-		options : {
-			responsive: true,
-			onClick: () => {
+	const days_chart_object = create_chart(days_chart,"Sessions per day",[],[],{
+		onClick: () => {
 
-				const selected_day = days_chart_object.chart.getElementAtEvent(event)[0]._model.label;
-				const parameters = selected_year+" "+selected_month+" "+selected_day;
-				const encoded_parameters = parameters.split(' ').join('+');
+			const selected_day = days_chart_object.chart.getElementAtEvent(event)[0]._model.label;
+			const parameters = selected_year+" "+selected_month+" "+selected_day;
+			const encoded_parameters = parameters.split(' ').join('+');
 
-				window.location.href = link+encoded_parameters;
+			window.location.href = link+encoded_parameters;
 
-			},
-			scales : {
-				yAxes : [ {
-					ticks : {
-						beginAtZero : true,
-					},
-				} ],
-			},
-		},
-	} );
+		}
+	});
 
-	const months_chart_object = new Chart( months_chart, {
-		type : "bar",
-		data : {
-			labels : [],
-			datasets : [ {
-				label : "Sessions per month",
-				data : [],
-				backgroundColor : backgroundColor,
-				borderColor : borderColor,
-				borderWidth : 1,
-			} ],
-		},
-		options : {
-			responsive: true,
-			scales : {
-				yAxes : [ {
-					ticks : {
-						beginAtZero : true,
-					},
-				} ],
-			},
-		},
-	} );
+	const months_chart_object = create_chart(months_chart,"Sessions per month");
 
 
 	function year_change_function(){

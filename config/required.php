@@ -24,11 +24,15 @@ if(DEVELOPMENT){ # these settings would be used during development
 	# **Warning!** All of the files present in this directory would be deleted.
 	define('WORKING_LOCATION','/home/ec2-user/data/Sp7-stats/files/');
 
+	# File that stores $github_username and $github_token for GitHub API to work
+	define('GITHUB_TOKEN_LOCATION','/home/ec2-user/data/github_tokens.php');
+
 }
 else { # these settings would be used during production
 
 	define('LINK', 'http://biwebdbtest.nhm.ku.edu/sp7-stats/');
 	define('FILES_LOCATION','/home/anhalt/sp7-stats-logs/');
 	define('WORKING_LOCATION','/home/sp7-stats/tmp/');
+	define('GITHUB_TOKEN_LOCATION','/home/sp7-stats/tmp/github_tokens.php');
 
 }

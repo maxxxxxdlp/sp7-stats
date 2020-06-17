@@ -1,6 +1,6 @@
 <?php
 
-require_once('components/menu.php');
+require_once('components/heading.php');
 
 $target_dir = WORKING_LOCATION.'institutions/';
 $target_extension = '.json';
@@ -159,6 +159,9 @@ require_once('static/html/search_form.html'); ?>
 	const search_callback = update_stats;
 </script>
 <div id="stats" class="alert alert-info"></div> <?php
+
+unset($disciplines);
+unset($collections);
 
 if($view=='0' || $view=='00') { ?>
 
@@ -348,4 +351,3 @@ elseif($view=='1' || $view=='11'){  ?>
 
 </script>
 <script src="<?=LINK?>static/js/index.js"></script>
-<script src="<?=LINK?>static/js/main.js"></script>
