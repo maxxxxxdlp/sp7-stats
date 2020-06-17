@@ -1,11 +1,6 @@
 <?php
 
-function require_file($require){
-
-	require_once(dirname(__FILE__).'/'.$require);
-
-}
-
+require_once(dirname(__FILE__).'/functions.php');
 require_file('../config/required.php');
 require_file('../config/optional.php');
 
@@ -14,6 +9,7 @@ if(DEVELOPMENT){
 	error_reporting(E_ALL | E_STRICT);
 	ini_set('display_errors', 1);
 }
+
 
 function head(){
 
