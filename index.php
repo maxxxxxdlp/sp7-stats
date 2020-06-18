@@ -359,3 +359,4 @@ elseif($view=='1' || $view=='11'){  ?>
 
 </script>
 <script src="<?=LINK?>static/js/index.js"></script>
+<script src="<?=LINK?>static/js/main.js"></script>
