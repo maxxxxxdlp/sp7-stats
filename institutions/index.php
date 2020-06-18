@@ -86,3 +86,4 @@ foreach($institutions as $institution => $disciplines){
 	const collection_count = '<?=$collections_count?>';
 	const report_count = '<?=$reports_count?>';
 </script>
+<script src="<?=LINK?>static/js/main.js" defer></script>

@@ -1,5 +1,7 @@
 <?php
 
+ignore_user_abort(TRUE);
+
 global $no_gui;
 $no_gui = TRUE;
 
