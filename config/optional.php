@@ -68,10 +68,14 @@ const chart_border_colors = ["rgba(86,206,255,1)", "rgba(162,235,54,1)", "rgba(8
 
 
 # Specifies the list of repositories that are available to chose from in the `github/` page
-const ALLOWED_REPOSITORIES = ['specify7','specify6','webportal-installer'];
+const ALLOWED_REPOSITORIES = ['specify7','specify6','webportal-installer','specify7-docker'];
 
 
 
-# FOR DEBUG ONLY
+### FOR DEBUG ONLY ###
+
 # This will show success actions for most actions performed while the data refresh is running
 define('VERBOSE',FALSE);
+
+# Whether to output all PHP errors while DEVELOPMENT is set to FALSE
+define('SHOW_ERRORS_IN_PRODUCTION',TRUE);

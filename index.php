@@ -174,6 +174,14 @@ if($view=='0' || $view=='00') { ?>
 	$discipline_count = 0;
 	$collection_count = 0;
 	$report_count = 0;
+
+	$unix_time = $last_day*86400;
+	$year = date(YEAR_FORMATTER, $unix_time);
+	$month = date(MONTH_FORMATTER, $unix_time);
+
+	$year = urlencode($year);
+	$month = urlencode($month);
+
 	foreach($institutions as $institution => $disciplines){
 
 		echo '<li>' . urldecode($institution) . '<ul>';
@@ -185,7 +193,7 @@ if($view=='0' || $view=='00') { ?>
 			foreach($collections as $collection => $data){
 
 				echo '<li data-reports_count="'.$data['count'].'">
-					<a href="'.LINK.'institution/?institution='.$institution.'&discipline='.$discipline.'&collection='.$collection.'">'.urldecode($collection).'</a> ['.$data['count'].']
+					<a href="'.LINK.'institution/?institution='.$institution.'&discipline='.$discipline.'&collection='.$collection.'&year='.$year.'&month='.$month.'">'.urldecode($collection).'</a> ['.$data['count'].']
 					<br>Specify 7 versions: ' . implode(', ', $data['sp7_version']) . '
 					<br>Specify 6 versions: ' . implode(', ', $data['sp6_version']);
 

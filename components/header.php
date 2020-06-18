@@ -5,7 +5,7 @@ require_file('../config/required.php');
 require_file('../config/optional.php');
 
 
-if(DEVELOPMENT){
+if(!DEVELOPMENT || SHOW_ERRORS_IN_PRODUCTION){
 	error_reporting(E_ALL | E_STRICT);
 	ini_set('display_errors', 1);
 }

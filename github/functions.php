@@ -122,7 +122,7 @@ function views_per_week_parser($data){
 
 function clones_per_day_parser($data){
 
-	format_data_as_chart($data,'clones',['Clones per week','Unique clones per week']);
+	format_data_as_chart($data,'clones',['Clones per day','Unique clones per day']);
 
 }
 
@@ -157,7 +157,7 @@ function releases_parser($data){
 
 			<tr>
 
-					<td><a href="<?=$result['name']?>" target="_blank"><?=$result['name']?></a></td>
+					<td><a href="<?=$result['html_url']?>" target="_blank"><?=$result['name']?></a></td>
 					<td><?=format_date($result['created_at'])?></td>
 					<td><?=format_date($result['published_at'])?></td>
 					<td><a href="<?=$result['author']['html_url']?>" target="_blank"><?=$result['author']['login']?></a></td> <?php
@@ -168,7 +168,7 @@ function releases_parser($data){
 					if(!$first_asset)
 						echo '</tr><tr><td></td><td></td><td></td><td></td>'; ?>
 
-					<td><a href="<?=$asset['url']?>" target="_blank"><?=$asset['name']?></a></td>
+					<td><?=$asset['name']?></td>
 					<td><?=$asset['download_count']?></td> <?php
 
 					$first_asset = FALSE;
