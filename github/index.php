@@ -7,19 +7,6 @@ require_once('../components/header.php');
 require_once('../components/menu.php');
 
 
-$page = 1;
-if(array_key_exists('paginator',$_GET) &&
-   array_key_exists($_GET['paginator'],$graphs) &&
-   array_key_exists('page',$_GET) &&
-   is_numeric($_GET['page']) &&
-   $_GET['page']>1){
-
-	$page = $_GET['page'];
-	$graphs[$_GET['paginator']]['page']=$page;
-
-}
-
-
 require_once(GITHUB_TOKEN_LOCATION);
 if(!isset($github_username) && !isset($github_token))
 	exit('No github username or token provided');
@@ -53,8 +40,23 @@ Select repository:
 
 require_once('config.php');
 require_once('functions.php');
+require_once('../components/charts.php');
+require_once('../components/paginator.php');
 
-clearstatcache(TRUE);
+
+$page = 1;
+if(array_key_exists('paginator',$_GET) &&
+   array_key_exists($_GET['paginator'],$graphs) &&
+   array_key_exists('page',$_GET) &&
+   is_numeric($_GET['page']) &&
+   $_GET['page']>1){
+
+	$page = $_GET['page'];
+	$graphs[$_GET['paginator']]['page']=$page;
+
+}
+
+
 if(!file_exists($target_dir)){//create $target_dir if does not exist and delete
 
 	mkdir($target_dir,0777,$recursive=TRUE);
@@ -108,9 +110,7 @@ else {
 		Data was last refreshed <?= unix_time_to_human_time($timestamp, FALSE) ?>. <?= $message_append ?>
 	</div> <?php
 
-}
-
-require_once('../components/charts.php'); ?>
+} ?>
 
 <br><br>
 <div class="container-fluid" style="padding:0">
@@ -128,9 +128,6 @@ require_once('../components/charts.php'); ?>
 			if($recursive){
 
 				$url .= $page;
-
-				if(!file_exists($target_file))
-					file_put_contents($target_file,'');
 
 				$target_file = explode('.',$target_file);
 				$target_file[count($target_file)-2] .= '_'.$page;
@@ -150,7 +147,7 @@ require_once('../components/charts.php'); ?>
 
 			$api_response = curl_exec($cURLConnection);
 			//$api_response = '{"test":"test"}';
-			if($page===6)
+			if($page===10)//force stop after 10 pages
 				$api_response='{}';
 
 			curl_close($cURLConnection);
@@ -160,21 +157,8 @@ require_once('../components/charts.php'); ?>
 			if(!is_array($data))
 				exit('Failed to get a valid response from ' . $url . ': ' . $api_response);
 
-			if(count($data)==0 && $recursive){
-
-				$pages_file = $target_dir.'pages.json';
-
-				$pages = [];
-				if(file_exists($pages_file))
-					$pages = json_decode(file_get_contents($pages_file),TRUE);
-
-				$pages[$original_file_name]=$page;
-
-				file_put_contents($pages_file,json_encode($pages));
-
-				return '';
-
-			}
+			if(count($data)==0 && $recursive)
+				return file_put_contents($original_file_name,$page-1);
 
 			file_put_contents($target_file, $api_response);
 
@@ -192,6 +176,7 @@ require_once('../components/charts.php'); ?>
 		foreach($graphs as $graph_name => $graph_data){
 
 			$target_file = $target_dir . $graph_name . $target_file_extension;
+			$total_pages = 0;
 
 			if(!array_key_exists('page',$graph_data))
 				$graph_data['page'] = FALSE;
@@ -208,27 +193,32 @@ require_once('../components/charts.php'); ?>
 
 			else {
 
-				if($graph_data['page']!==FALSE){
+				$file_data = file_get_contents($target_file);
+
+				if(is_numeric($file_data) && $graph_data['page']!==FALSE){
+					$total_pages = $file_data;
+
 					$target_file = explode('.',$target_file);
 					$target_file[count($target_file)-2] .= '_'.$page;
 					$target_file = implode('.',$target_file);
+					$file_data = file_get_contents($target_file);
 				}
 
-				$file_data = file_get_contents($target_file);
 				$data = json_decode($file_data, TRUE);
-
 				if(!is_array($data))
 					exit('Failed to parse file content: ' . $file_data);
 
 			} ?>
 
-			<div class="col-12 col-lg-6 mb-5">
+			<div class="col-12 col-xl-6 mb-5">
 
 				<h2><?=$graph_data['title']?></h2>
 				<p><?=$graph_data['description']?></p><?php
 
 				$function_name = $graph_name.'_parser';
-				$function_name($data); // run the parser function ?>
+				$function_name($data); // run the parser function
+				if($total_pages!=0)
+					paginator(LINK.'github/?repository='.$repository.'&paginator='.$graph_name.'&page=',$page,$total_pages); ?>
 
 			</div> <?php
 

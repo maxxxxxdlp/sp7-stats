@@ -41,23 +41,27 @@ echo '<h1>'.urldecode($institution.' > '.$discipline.' > '.$collection).'</h1><b
 $data = $data[$discipline][$collection];
 
 
-foreach($data[1] as $year => $months)
-	foreach($months as $month => $days)
-		foreach($days[0] as $day)
-			strtotime($year.' '.$month.' '.$day);
+if(array_key_exists('year',$_GET))
+	$chosen_year = urldecode($_GET['year']);
+if(array_key_exists('month',$_GET))
+	$chosen_month = urldecode($_GET['month']);
+
 
 require_once('../components/charts.php'); ?>
 
 
 <label>
 	<select
-			id="year_select"
-			class="form-control"><?php
+		id="year_select"
+		class="form-control"><?php
 
-			foreach(array_keys($data[0]) as $year)
-				echo '<option value="'.$year.'">'.$year.'</option>'; ?>
+		foreach(array_keys($data[0]) as $year){ ?>
 
-		</select>
+			<option value="<?=$year?>"><?=$year?></option> <?php
+
+		} ?>
+
+	</select>
 </label>
 <label>
 	<select
@@ -66,13 +70,15 @@ require_once('../components/charts.php'); ?>
 </label>
 <div class="container-fluid">
 	<div class="row">
-		<div class="col-12 col-md-6"><canvas id="months_chart" width="1000" height="300"></canvas></div>
-		<div class="col-12 col-md-6"><canvas id="days_chart" width="1000" height="300"></canvas></div>
+		<div class="col-12 col-xl-6"><canvas id="months_chart" width="1000" height="300"></canvas></div>
+		<div class="col-12 col-xl-6"><canvas id="days_chart" width="1000" height="300"></canvas></div>
 	</div>
 </div>
 <script>
-	let days = JSON.parse('<?=json_encode($data[1])?>');
-	let months = JSON.parse('<?=json_encode($data[0])?>');
-	let link = '<?=LINK?>?date=';
+	const days = JSON.parse('<?=json_encode($data[1])?>');
+	const months = JSON.parse('<?=json_encode($data[0])?>');
+	const link = '<?=LINK?>?date=';
+	const chosen_year = '<?=$chosen_year?>';
+	let chosen_month = '<?=$chosen_month?>';
 </script>
 <script src="../static/js/institution.js"></script>
