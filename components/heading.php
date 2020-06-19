@@ -19,9 +19,9 @@ if(time()-$misc['timestamp']>SHOW_DATA_OUT_OF_DATE_WARNING_AFTER){
 } ?>
 
 <div id="last_refresh_alert" class="alert alert-<?=$class_append?>">
-	Data was last refreshed <?=unix_time_to_human_time($misc['timestamp'])?>.
-	There are <?=$misc['total_lines']?> records total.
-	Most recent record is from <?=unix_time_to_human_time($misc['earliest_time'])?>. <?=$message_append?>
+	Data was last refreshed <?=unix_time_to_human_time($misc['timestamp'])?>.<br>
+	There are <?=$misc['total_lines']?> records total.<br>
+	Your records span from <?=unix_time_to_human_time($misc['first_time'])?> till <?=unix_time_to_human_time($misc['last_time'])?>.<br> <?=$message_append?>
 </div>
 
 <script>
