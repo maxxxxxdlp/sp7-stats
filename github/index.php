@@ -107,7 +107,7 @@ else {
 	<div
 		id="alert"
 		class="alert alert-<?= $class_append ?>">
-		Data was last refreshed <?= unix_time_to_human_time($timestamp, FALSE) ?>. <?= $message_append ?>
+		Data was last refreshed <?= unix_time_to_human_time($timestamp) ?>. <?= $message_append ?>
 	</div> <?php
 
 } ?>

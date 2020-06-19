@@ -78,7 +78,7 @@ foreach($files as $file){
 
 	}
 
-	$human_time = unix_time_to_human_time($unix_time);
+	$human_time = unix_days_to_human_time($unix_time);
 
 	$result_1 .= '<option value="'.$unix_time.'" '.$selected_1_append.'>' . $human_time . '</option>';
 	$result_2 .= '<option value="'.$unix_time.'" '.$selected_2_append.'>' . $human_time . '</option>';
@@ -354,7 +354,7 @@ elseif($view=='1' || $view=='11'){  ?>
 	const link = '<?=LINK?>?'; <?php
 
 	if(time()-$first_unix_begin*86400>SHOW_DATA_OUT_OF_DATE_WARNING_AFTER){ ?>
-		$('#last_refresh_alert')[0].outerHTML += '<div class="alert alert-danger">We have not received any new log files since <?=unix_time_to_human_time($first_unix_begin)?>. Make sure `FILES_LOCATION` is set correctly to your Nginx\'s log directory</div>'; <?php
+		$('#last_refresh_alert')[0].outerHTML += '<div class="alert alert-danger">We have not received any new log files since <?=unix_days_to_human_time($first_unix_begin)?>. Make sure `FILES_LOCATION` is set correctly to your Nginx\'s log directory</div>'; <?php
 	} ?>
 
 	const institution_count = '<?=$institution_count?>';
