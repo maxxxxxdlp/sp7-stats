@@ -43,8 +43,12 @@ $data = $data[$discipline][$collection];
 
 if(array_key_exists('year',$_GET))
 	$chosen_year = urldecode($_GET['year']);
+else
+	$chosen_year = '';
 if(array_key_exists('month',$_GET))
 	$chosen_month = urldecode($_GET['month']);
+else
+	$chosen_month = '';
 
 
 require_once('../components/charts.php'); ?>
@@ -81,4 +85,4 @@ require_once('../components/charts.php'); ?>
 	const chosen_year = '<?=$chosen_year?>';
 	let chosen_month = '<?=$chosen_month?>';
 </script>
-<script src="../static/js/institution.js"></script>
+<script src="../static/js/institution<?=JS?>" async></script>

@@ -10,6 +10,15 @@ if(!DEVELOPMENT || SHOW_ERRORS_IN_PRODUCTION){
 	ini_set('display_errors', 1);
 }
 
+if(FALSE && DEVELOPMENT){
+	define('CSS','.css');
+	define('JS','.js');
+}
+else {
+	define('CSS','.min.css');
+	define('JS','.min.js');
+}
+
 
 function head(){
 
@@ -36,7 +45,7 @@ function head(){
 				href="https://sp7demofish.specifycloud.org/static/img/fav_icon.png">
 		<link
 				rel="stylesheet"
-				href="<?=LINK?>static/css/main.css">
+				href="<?=LINK?>static/css/main<?=CSS?>">
 		<link
 				rel="stylesheet"
 				href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css"
