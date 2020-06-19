@@ -1,20 +1,20 @@
 <?php
 
 global $total_lines;
+global $earliest_time;
 global $fetched_user_agent_strings_count;
-
-
-$total_lines = 0;
 
 
 //174.221.128.140 - - [24/May/2020:09:36:13 -0400] "GET /capture?version=v7.2.0-227-g47813e2&dbVersion=6.7.03&institution=University+of+Texas+at+Austin&discipline=NPL+collections&collection=NPL+collections&isaNumber= HTTP/1.1" 204 3071 "http://specify.npl.tacc.utexas.edu/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15"
 function extract_data(&$file_data){
 
 	global $total_lines;
+	global $earliest_time;
 
 	$file_data = explode("\n",$file_data);
 	$data = [];
 
+	$time = 0;
 	foreach($file_data as $line){
 
 		$line_data = [];
@@ -39,8 +39,8 @@ function extract_data(&$file_data){
 		//DATE
 		$needle = ']';
 		$part_end = strpos($line,$needle);
-		$date = strtotime(substr($line,0,$part_end));//24/May/2020:09:36:13 -0400
-		$date = intval($date/86400);//returns the number of days after 01.01.1970
+		$time = strtotime(substr($line,0,$part_end));//24/May/2020:09:36:13 -0400
+		$date = intval($time/86400);//returns the number of days after 01.01.1970
 
 		$line = substr($line,$part_end+strlen($needle)+2);
 
@@ -114,6 +114,10 @@ function extract_data(&$file_data){
 		$total_lines++;
 
 	}
+
+
+	if($earliest_time==0 || $time>$earliest_time)
+		$earliest_time = $time;
 
 	foreach($data as $date => $file_data)
 		compile_institutions($file_data, $date);
