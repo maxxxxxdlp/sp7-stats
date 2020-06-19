@@ -66,7 +66,8 @@ function prepare_dir($dir,$delete_files=TRUE){
 }
 
 $total_lines = 0;
-$earliest_time = FALSE;
+$first_time = FALSE;
+$last_time = FALSE;
 
 //memory management
 //ini_set('memory_limit','32M');
@@ -104,7 +105,8 @@ else {
 	];
 
 	$misc_file_data['total_lines'] = $total_lines;
-	$misc_file_data['earliest_time'] = $earliest_time;
+	$misc_file_data['first_time'] = $first_time;
+	$misc_file_data['last_time'] = $last_time;
 
 	file_put_contents(WORKING_LOCATION.'misc.json',json_encode($misc_file_data));
 	alert('success','Success!');

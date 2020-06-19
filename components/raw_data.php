@@ -1,7 +1,8 @@
 <?php
 
 global $total_lines;
-global $earliest_time;
+global $first_time;
+global $last_time;
 global $fetched_user_agent_strings_count;
 
 
@@ -9,12 +10,14 @@ global $fetched_user_agent_strings_count;
 function extract_data(&$file_data){
 
 	global $total_lines;
-	global $earliest_time;
+	global $first_time;
+	global $last_time;
 
 	$file_data = explode("\n",$file_data);
 	$data = [];
 
 	$time = 0;
+	$temp_first_time = 0;
 	foreach($file_data as $line){
 
 		$line_data = [];
@@ -41,6 +44,9 @@ function extract_data(&$file_data){
 		$part_end = strpos($line,$needle);
 		$time = strtotime(substr($line,0,$part_end));//24/May/2020:09:36:13 -0400
 		$date = intval($time/86400);//returns the number of days after 01.01.1970
+
+		if($temp_first_time==0 && $time!=0)
+			$temp_first_time=$time;
 
 		$line = substr($line,$part_end+strlen($needle)+2);
 
@@ -116,8 +122,11 @@ function extract_data(&$file_data){
 	}
 
 
-	if($earliest_time==0 || $time>$earliest_time)
-		$earliest_time = $time;
+	if($last_time==0 || $time>$last_time)
+		$last_time = $time;
+
+	if($first_time==FALSE || $first_time>$temp_first_time)
+		$first_time = $temp_first_time;
 
 	foreach($data as $date => $file_data)
 		compile_institutions($file_data, $date);
