@@ -10,7 +10,7 @@ if(!DEVELOPMENT || SHOW_ERRORS_IN_PRODUCTION){
 	ini_set('display_errors', 1);
 }
 
-if(FALSE && DEVELOPMENT){
+if(DEVELOPMENT){
 	define('CSS','.css');
 	define('JS','.js');
 }
