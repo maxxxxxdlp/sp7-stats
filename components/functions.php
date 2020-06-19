@@ -7,10 +7,7 @@ function require_file($require){
 }
 
 
-function unix_time_to_human_time($time,$use_days=TRUE){
-
-	if($use_days)
-		$time *= 86400;
+function unix_time_to_human_time($time){
 
 	$time_passed = time()-$time;
 
@@ -27,5 +24,19 @@ function unix_time_to_human_time($time,$use_days=TRUE){
 		$result = intval($time_passed/86400).' days ago';
 
 	return preg_replace('/^(1 \w+)s( ago)/','$1$2',$result);
+
+}
+
+function unix_days_to_human_time($days){
+
+	$days = intval(time()/86400)-$days;
+
+	if($days==0)
+		return 'Today';
+
+	if($days==1)
+		return 'Yesterday';
+
+	return $days.' days ago';
 
 }

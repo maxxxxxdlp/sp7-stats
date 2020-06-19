@@ -19,7 +19,7 @@ if(time()-$misc['timestamp']>SHOW_DATA_OUT_OF_DATE_WARNING_AFTER){
 } ?>
 
 <div id="last_refresh_alert" class="alert alert-<?=$class_append?>">
-	Data was last refreshed <?=unix_time_to_human_time($misc['timestamp'],FALSE)?>.
+	Data was last refreshed <?=unix_time_to_human_time($misc['timestamp'])?>.
 	There are <?=$misc['total_lines']?> records total. <?=$message_append?>
 </div>
 
