@@ -2,7 +2,8 @@
 
 require_once('../components/header.php');
 
-date_default_timezone_set('America/Chicago');
+date_default_timezone_set('UTC');
+//date_default_timezone_set('America/Chicago');
 
 $no_gui_separator = "<br>\n";
 
@@ -64,7 +65,8 @@ function prepare_dir($dir,$delete_files=TRUE){
 
 }
 
-$total_lines = FALSE;
+$total_lines = 0;
+$earliest_time = FALSE;
 
 //memory management
 //ini_set('memory_limit','32M');
@@ -101,8 +103,8 @@ else {
 		'timestamp'=>time()
 	];
 
-	if($total_lines !== FALSE)
-		$misc_file_data['total_lines'] = $total_lines;
+	$misc_file_data['total_lines'] = $total_lines;
+	$misc_file_data['earliest_time'] = $earliest_time;
 
 	file_put_contents(WORKING_LOCATION.'misc.json',json_encode($misc_file_data));
 	alert('success','Success!');
