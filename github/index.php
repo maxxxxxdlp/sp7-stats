@@ -195,8 +195,11 @@ else {
 
 				$file_data = file_get_contents($target_file);
 
-				if(is_numeric($file_data) && $graph_data['page']!==FALSE){
+				if($graph_data['page']!==FALSE){
 					$total_pages = $file_data;
+
+					if($total_pages=='')
+						continue;
 
 					$target_file = explode('.',$target_file);
 					$target_file[count($target_file)-2] .= '_'.$page;
@@ -206,7 +209,7 @@ else {
 
 				$data = json_decode($file_data, TRUE);
 				if(!is_array($data))
-					exit('Failed to parse file content: ' . $file_data);
+					exit('Failed to parse the content of '.$target_file.': ' . $file_data);
 
 			} ?>
 
@@ -247,4 +250,4 @@ else {
 	const repository = '<?=$repository?>';
 
 </script>
-<script src="<?=LINK?>static/js/github.js" defer></script>
+<script src="<?=LINK?>static/js/github<?=JS?>" defer></script>

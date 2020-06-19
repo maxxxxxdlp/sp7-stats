@@ -9,9 +9,11 @@ $(function(){
 	else
 		targets = $('ol:not(.breadcrumb) > li');
 
-	search.bind('input',function(){
+	search.bind('input',filter);
 
-		const search_query = search_field.val();
+	function filter(){
+
+		search_query = search_field.val();
 
 		if(search_query==='')
 			targets.show();
@@ -36,6 +38,8 @@ $(function(){
 		if(typeof search_callback === "function")
 			search_callback();
 
-	});
+	}
+
+	filter();
 
 });

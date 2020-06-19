@@ -135,7 +135,7 @@ if(array_key_exists('view',$_GET))
 if($view!=='11' && $view !=='00'){ ?>
 
 	<nav aria-label="breadcrumb">
-		<ol class="breadcrumb"> <?php
+		<ol class="breadcrumb" id="breadcrumb"> <?php
 			if($view=='0'){?>
 				<li class="breadcrumb-item active" aria-current="page">Show as list</li>
 				<li class="breadcrumb-item"><a href="<?=LINK?>?file_1=<?=$first_day?>&file_2=<?=$last_day?>&view=1">Show as table</a></li> <?php
@@ -148,13 +148,13 @@ if($view!=='11' && $view !=='00'){ ?>
 	</nav> <?php
 }
 
-require_once('static/html/search_form.html'); ?>
+require_once('components/search.php'); ?>
 <label class="mb-3 mt-2">
 	Hide collections that reported fewer than
 	<input type="number" id="count" value="<?=$times?>">
 	times
 </label><br>
-<script src="<?=LINK?>static/js/stats.js"></script>
+<script src="<?=LINK?>static/js/stats<?=JS?>"></script>
 <script>
 	const search_callback = update_stats;
 </script>
@@ -162,6 +162,7 @@ require_once('static/html/search_form.html'); ?>
 
 unset($disciplines);
 unset($collections);
+unset($collection);
 
 if($view=='0' || $view=='00') { ?>
 
@@ -343,8 +344,14 @@ elseif($view=='1' || $view=='11'){  ?>
 
 <script>
 
-	const link = '<?=LINK?>?view=<?=$view?>&file_1=<?=$first_day?>&file_2=<?=$last_day?>&';
-	const view = '<?=$view?>'; <?php
+	let count = '<?=$times?>';
+	let search_query = '<?=$search_query?>';
+
+	const first_day = '<?=$first_day?>';
+	const last_day = '<?=$last_day?>';
+	const view = '<?=$view?>';
+
+	const link = '<?=LINK?>?'; <?php
 
 	if(time()-$first_unix_begin*86400>SHOW_DATA_OUT_OF_DATE_WARNING_AFTER){ ?>
 		$('#last_refresh_alert')[0].outerHTML += '<div class="alert alert-danger">We have not received any new log files since <?=unix_time_to_human_time($first_unix_begin)?>. Make sure `FILES_LOCATION` is set correctly to your Nginx\'s log directory</div>'; <?php
@@ -358,5 +365,5 @@ elseif($view=='1' || $view=='11'){  ?>
 	const active_menu = 2;
 
 </script>
-<script src="<?=LINK?>static/js/index.js"></script>
-<script src="<?=LINK?>static/js/main.js"></script>
+<script src="<?=LINK?>static/js/index<?=JS?>" defer></script>
+<script src="<?=LINK?>static/js/main<?=JS?>" defer></script>

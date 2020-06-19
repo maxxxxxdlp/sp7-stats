@@ -8,4 +8,4 @@
 	<a href="<?=LINK?>institutions/" class="btn btn-info">Show all records</a>
 	<a href="<?=LINK?>github/?repository=specify7" class="btn btn-info">GitHub Stats</a>
 </div>
-<script src="<?=LINK?>static/js/menu.js" defer></script><br><br>
+<script src="<?=LINK?>static/js/menu<?=JS?>" defer></script><br><br>
