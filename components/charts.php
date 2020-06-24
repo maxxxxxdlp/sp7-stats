@@ -1,10 +1,10 @@
 <script>
-	const chart_background_colors = JSON.parse('<?=json_encode(chart_background_colors)?>');
-	const chart_border_colors = JSON.parse('<?=json_encode(chart_border_colors)?>');
+	const chart_background_colors = JSON.parse('<?=json_encode(CHART_BACKGROUND_COLORS)?>');
+	const chart_border_colors = JSON.parse('<?=json_encode(CHART_BORDER_COLORS)?>');
 
 	const default_options = {
 		responsive: true,
-			scales : {
+		scales : {
 			yAxes : [ {
 				ticks : {
 					beginAtZero : true,

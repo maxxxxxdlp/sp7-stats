@@ -10,7 +10,7 @@ $(function(){
 	let selected_month = '';
 
 	const days_chart_object = create_chart(days_chart,"Sessions per day",[],[],{
-		onClick: () => {//redirect to main page when clicked on the dat
+		onClick: () => {//redirect to main page when clicked on the day
 
 			const selected_day = days_chart_object.chart.getElementAtEvent(event)[0]._model.label;
 			const parameters = selected_year+" "+selected_month+" "+selected_day;
