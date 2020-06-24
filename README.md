@@ -3,6 +3,7 @@ This website provides some information on the usage of [Specify 7](https://githu
 
 ## Requirements
 1. PHP 7.2+ (older versions may work)
+1. [PHP Curl](https://stackoverflow.com/a/6382581/8584605)
 1. Any Webserver
 
 ## Installation
@@ -16,10 +17,13 @@ Optional parameters are located in `./config/optional.php`
  deleted.
 1. If you want GitHub stats to work, set `GITHUB_TOKEN_LOCATION` to a location of a PHP file that defines `$github_username` and `$github_token`. The user specified in `$github_username` should have push permissions to the repository, stats of which would be displayed (e.x `specify7` and `specify6`)
 1. Configure your webserver to point to the directory were this repository is saved.
-1. You can go over the other settings in the `./config/optional.php` file and see if there is anything you would like to adjust.
 
 
 ### Optional settings
+
+You can go over the other settings in the `./config/optional.php` file and see if there is anything you would like to adjust.
+
+For example:
 1. You can set up daily cron to the following location `http://<yourdomain>/cron/refresh_data.php`. This will automatically unzip the files and compile the information so that users can get up to date information.
 1. You can change the duration of time before compiled data is considered out of date by changing `SHOW_DATA_OUT_OF_DATE_WARNING_AFTER`. The default value is 86400 = 1 day[![analytics](http://www.google-analytics.com/collect?v=1&t=pageview&dl=https%3A%2F%2Fgithub.com%2Fspecify%2Fsp7-stats&uid=readme&tid=UA-169822764-2)]()
 
