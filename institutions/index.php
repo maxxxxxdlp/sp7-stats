@@ -16,28 +16,34 @@ $file_path = WORKING_LOCATION.'institutions.json';
 if(!file_exists($file_path))
 	exit('File does not exist');
 
-$institutions = json_decode(file_get_contents($file_path),true);
+$domains = json_decode(file_get_contents($file_path),true);
 
 $times = 0;
 if(array_key_exists('hide',$_GET) && is_numeric($_GET['hide']) && $_GET['hide']>0)
 	$times = intval($_GET['hide']);
 
 if($times!=0)
-	foreach($institutions as $institution => &$disciplines){
+	foreach($domains as $domain => &$institutions){
+		foreach($institutions as $institution => &$disciplines){
 
-		foreach($disciplines as $discipline => &$collections){
+			foreach($disciplines as $discipline => &$collections){
 
-			foreach($collections as $collection => $count)
-				if($count<$times)
-					unset($collections[$collection]);
+				foreach($collections as $collection => $count)
+					if($count<$times)
+						unset($collections[$collection]);
 
-			if(count($collections)==0)
-				unset($disciplines[$discipline]);
+				if(count($collections)==0)
+					unset($disciplines[$discipline]);
+
+			}
+
+			if(count($disciplines)==0)
+				unset($institutions[$institution]);
 
 		}
 
-		if(count($disciplines)==0)
-			unset($institutions[$institution]);
+		if(count($institutions)==0)
+			unset($domains[$domain]);
 
 	} ?>
 
@@ -50,31 +56,40 @@ if($times!=0)
 <div id="stats" class="alert alert-info"></div>
 <ol> <?php
 
-$institutions_count = count($institutions);
+$domains_count = count($domains);
+$institutions_count = 0;
 $disciplines_count = 0;
 $collections_count = 0;
 $reports_count = 0;
-foreach($institutions as $institution => $disciplines){
+foreach($domains as $domain => $institutions){
 
-	echo '<li>'.urldecode($institution).'<ul>';
+	$decoded_domain = urldecode($domain);
+	echo '<li><a href="http://'.$decoded_domain.'" target="_blank">' . $decoded_domain . '</a><ul>';
 
-	foreach($disciplines as $discipline => $collections){
+	foreach($institutions as $institution => $disciplines){
 
-		echo '<li>'.urldecode($discipline).'<ul>';
+		echo '<li>'.urldecode($institution).'<ul>';
 
-		foreach($collections as $collection => $count){
-			echo '<li data-reports_count="'.$count.'"><a href="' . LINK . 'institution/?institution=' . $institution . '&discipline=' . $discipline . '&collection=' . $collection . '">' . urldecode($collection) . '</a> [' . $count . ']</li>';
+		foreach($disciplines as $discipline => $collections){
 
-			$collections_count++;
-			$reports_count+=$count;
+			echo '<li>'.urldecode($discipline).'<ul>';
+
+			foreach($collections as $collection => $count){
+				echo '<li data-reports_count="'.$count.'"><a href="' . LINK . 'institution/?institution=' . $institution . '&discipline=' . $discipline . '&collection=' . $collection . '">' . urldecode($collection) . '</a> [' . $count . ']</li>';
+
+				$collections_count++;
+				$reports_count+=$count;
+			}
+
+			echo '</ul></li>';
+
+			$disciplines_count++;
+
 		}
 
 		echo '</ul></li>';
 
-		$disciplines_count++;
-
 	}
-
 	echo '</ul></li>';
 
 } ?>

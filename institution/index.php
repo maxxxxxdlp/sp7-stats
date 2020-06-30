@@ -3,11 +3,12 @@
 require_once('../components/heading.php');
 
 
-if(!array_key_exists('institution',$_GET) || !array_key_exists('discipline',$_GET) || !array_key_exists('collection',$_GET))
+if(!array_key_exists('domain',$_GET) || !array_key_exists('institution',$_GET) || !array_key_exists('discipline',$_GET) || !array_key_exists('collection',$_GET))
 	exit('Error: invalid URL');
 
 
 //fix for browsers automatically encoding/decoding params in the URL
+$domain = urlencode(urldecode($_GET['domain']));
 $institution = urlencode(urldecode($_GET['institution']));
 $discipline = urlencode(urldecode($_GET['discipline']));
 $collection = urlencode(urldecode($_GET['collection']));
@@ -19,9 +20,16 @@ if(!file_exists($institutions_file))
 
 
 $institutions = json_decode(file_get_contents($institutions_file),true);
-$institution_id = array_search($institution,$institutions);
-if($institution_id===FALSE)
-	exit('Institution not found');
+
+if(!array_key_exists($domain,$institutions))
+	exit('Domain not found');
+
+
+if(!array_key_exists($institution,$institutions[$domain]))
+	exit('institution not found');
+
+
+$institution_id = $institutions[$domain][$institution];
 
 
 $institution_file = WORKING_LOCATION.'institutions2/'.$institution_id.'.json';
@@ -37,7 +45,7 @@ if(!array_key_exists($collection,$data[$discipline]))
 	exit('Collection not found');
 
 
-echo '<h1>'.urldecode($institution.' > '.$discipline.' > '.$collection).'</h1><br>';
+echo '<h1>'.urldecode($domain.' > '.$institution.' > '.$discipline.' > '.$collection).'</h1><br>';
 $data = $data[$discipline][$collection];
 
 
