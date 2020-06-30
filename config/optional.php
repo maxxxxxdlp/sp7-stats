@@ -26,6 +26,17 @@ const INSTITUTIONS_TO_EXCLUDE = [
 	'1',
 ];
 
+# Set a list of domains, records from which are to be excluded
+const DOMAINS_TO_EXCLUDE = [
+	'db1.biwebdbtest.nhm.ku.edu',
+	'db2.biwebdbtest.nhm.ku.edu',
+	'db3.biwebdbtest.nhm.ku.edu',
+	'db4.biwebdbtest.nhm.ku.edu',
+	'db5.biwebdbtest.nhm.ku.edu',
+	'db6.biwebdbtest.nhm.ku.edu',
+	'sp7demofish.specifycloud.org',
+];
+
 
 
 # If data was not refreshed for this much time, the user would get a reminder to refresh data

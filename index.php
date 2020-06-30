@@ -99,7 +99,7 @@ foreach($institutions as $institution_name => &$disciplines){
 				continue;
 			}
 
-			$cols = ['sp7_version','sp6_version','isa_number','ip_address','browser','os'];
+			$cols = ['sp7_version','sp6_version','isa_number','ip_address','browser','os','domain'];
 			foreach($cols as $col)
 				$collection[$col] = array_unique($collection[$col]);
 
@@ -195,13 +195,28 @@ if($view=='0' || $view=='00') { ?>
 
 				echo '<li data-reports_count="'.$data['count'].'">
 					<a href="'.LINK.'institution/?institution='.$institution.'&discipline='.$discipline.'&collection='.$collection.'&year='.$year.'&month='.$month.'">'.urldecode($collection).'</a> ['.$data['count'].']
-					<br>Specify 7 versions: ' . implode(', ', $data['sp7_version']) . '
-					<br>Specify 6 versions: ' . implode(', ', $data['sp6_version']);
+					<br>Specify 7 versions:<ul>';
+
+				foreach($data['sp7_version'] as $version)
+					echo '<li>' . $version . '</li>';
+
+				echo '</ul>Specify 6 versions:<ul>';
+
+				foreach($data['sp6_version'] as $version)
+					echo '<li>' . $version . '</li>';
+
+
+				echo '</ul>Domains:<ul>';
+
+				foreach($data['domain'] as $domain)
+					echo '<li><a href="http://' . $domain . '" target="_blank">' . $domain . '</a></li>';
+
+				echo '</ul>';
 
 				if(count($data['isa_number']) > 0)
-					echo '<br>ISA Numbers: ' . implode(', ', $data['isa_number']);
+					echo 'ISA Numbers: ' . implode(', ', $data['isa_number']).'<br>';
 
-				echo '<br>IP Addresses:<ul>';
+				echo 'IP Addresses:<ul>';
 
 				foreach($data['ip_address'] as $ip_address)
 					echo '<li><a href="' . LINK . 'ip_info?ip=' . $ip_address . '" target="_blank">' . $ip_address . '</a></li>';
@@ -299,9 +314,14 @@ elseif($view=='1' || $view=='11'){  ?>
 				foreach($collections as $collection => $data){
 					to_cell(3,'<a data-reports_count="'.$data['count'].'" href="'.LINK.'institution/?institution='.$institution.'&discipline='.$discipline.'&collection='.$collection.'">'.urldecode($collection).'</a> ['.$data['count'].']');
 					to_cell(4,'Specify 7 versions');
-					to_cell(5,implode(', ',$data['sp7_version']));
+					foreach($data['sp7_version'] as $version)
+						to_cell(5,$version);
 					to_cell(4,'Specify 6 versions');
-					to_cell(5,implode(', ',$data['sp6_version']));
+					foreach($data['sp6_version'] as $version)
+						to_cell(5,$version);
+					to_cell(4,'Domains');
+					foreach($data['domain'] as $domain)
+						to_cell(5,$domain);
 
 					if(count($data['isa_number'])>0){
 						to_cell(4,'ISA Numbers');

@@ -64,7 +64,7 @@ function compile_institutions($lines_data, $file_name){
 
 
 	$result_data = [];
-	$cols = ['sp7_version','sp6_version','isa_number','ip_address','browser','os'];
+	$cols = ['sp7_version','sp6_version','isa_number','ip_address','browser','os','domain'];
 
 	foreach($lines_data as $line_data){
 
@@ -76,6 +76,7 @@ function compile_institutions($lines_data, $file_name){
 		$collection = $line_data['collection'];
 		$isa_number = $line_data['isaNumber'];
 		$browser = $line_data['browser'];
+		$domain = $line_data['domain'];
 		$os = $line_data['os'];
 
 		//institution
