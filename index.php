@@ -36,7 +36,7 @@ if(array_key_exists('date',$_GET)){
 $first_unix_begin = NULL;
 $result_1 = '';
 $result_2 = '';
-$domains = [];
+$institutions = [];
 
 
 $times = 0;
@@ -74,7 +74,7 @@ foreach($files as $file){
 	if($unix_time >= $first_day && $unix_time <= $last_day){
 
 		$data = json_decode(file_get_contents($file),TRUE);
-		$domains = array_merge_recursive($domains,$data);
+		$institutions = array_merge_recursive($institutions,$data);
 
 	}
 
@@ -85,40 +85,33 @@ foreach($files as $file){
 
 }
 
-foreach($domains as $domain_name => &$institutions){
+foreach($institutions as $institution_name => &$disciplines){
 
-	foreach($institutions as $institution_name => &$disciplines){
+	foreach($disciplines as $discipline_name => &$collections){
 
-		foreach($disciplines as $discipline_name => &$collections){
+		foreach($collections as $collection_name => &$collection){
 
-			foreach($collections as $collection_name => &$collection){
+			if(is_array($collection['count']))//fix array_merge_recursive creating an array out of 'count'
+				$collection['count'] = array_sum($collection['count']);
 
-				if(is_array($collection['count']))//fix array_merge_recursive creating an array out of 'count'
-					$collection['count'] = array_sum($collection['count']);
-
-				if($collection['count']<$times){
-					unset($collections[$collection_name]);
-					continue;
-				}
-
-				$cols = ['sp7_version','sp6_version','isa_number','ip_address','browser','os'];
-				foreach($cols as $col)
-					$collection[$col] = array_unique($collection[$col]);
-
+			if($collection['count']<$times){
+				unset($collections[$collection_name]);
+				continue;
 			}
 
-			if(count($collections)==0)
-				unset($disciplines[$discipline_name]);
+			$cols = ['sp7_version','sp6_version','isa_number','ip_address','browser','os'];
+			foreach($cols as $col)
+				$collection[$col] = array_unique($collection[$col]);
 
 		}
 
-		if(count($disciplines)==0)
-			unset($institutions[$institution_name]);
+		if(count($collections)==0)
+			unset($disciplines[$discipline_name]);
 
 	}
 
-	if(count($institutions)==0)
-		unset($domains[$domain_name]);
+	if(count($disciplines)==0)
+		unset($institutions[$institution_name]);
 
 } ?>
 
@@ -167,16 +160,9 @@ require_once('components/search.php'); ?>
 </script>
 <div id="stats" class="alert alert-info"></div> <?php
 
-unset($institutions);
 unset($disciplines);
 unset($collections);
 unset($collection);
-
-$domain_count = count($domains);
-$institution_count = 0;
-$discipline_count = 0;
-$collection_count = 0;
-$report_count = 0;
 
 if($view=='0' || $view=='00') { ?>
 
@@ -185,6 +171,11 @@ if($view=='0' || $view=='00') { ?>
 	</script>
 	<ol> <?php
 
+	$institution_count = count($institutions);
+	$discipline_count = 0;
+	$collection_count = 0;
+	$report_count = 0;
+
 	$unix_time = $last_day*86400;
 	$year = date(YEAR_FORMATTER, $unix_time);
 	$month = date(MONTH_FORMATTER, $unix_time);
@@ -192,60 +183,51 @@ if($view=='0' || $view=='00') { ?>
 	$year = urlencode($year);
 	$month = urlencode($month);
 
-	foreach($domains as $domain => $institutions){
+	foreach($institutions as $institution => $disciplines){
 
-		$decoded_domain = urldecode($domain);
-		echo '<li><a href="http://'.$decoded_domain.'" target="_blank">' . $decoded_domain . '</a><ul>';
+		echo '<li>' . urldecode($institution) . '<ul>';
 
-		foreach($institutions as $institution => $disciplines){
+		foreach($disciplines as $discipline => $collections){
 
-			echo '<li>' . urldecode($institution) . '<ul>';
+			echo '<li>' . urldecode($discipline) . '<ul>';
 
-			foreach($disciplines as $discipline => $collections){
+			foreach($collections as $collection => $data){
 
-				echo '<li>' . urldecode($discipline) . '<ul>';
+				echo '<li data-reports_count="'.$data['count'].'">
+					<a href="'.LINK.'institution/?institution='.$institution.'&discipline='.$discipline.'&collection='.$collection.'&year='.$year.'&month='.$month.'">'.urldecode($collection).'</a> ['.$data['count'].']
+					<br>Specify 7 versions: ' . implode(', ', $data['sp7_version']) . '
+					<br>Specify 6 versions: ' . implode(', ', $data['sp6_version']);
 
-				foreach($collections as $collection => $data){
+				if(count($data['isa_number']) > 0)
+					echo '<br>ISA Numbers: ' . implode(', ', $data['isa_number']);
 
-					echo '<li data-reports_count="'.$data['count'].'">
-						<a href="'.LINK.'institution/?domain='.$domain.'&institution='.$institution.'&discipline='.$discipline.'&collection='.$collection.'&year='.$year.'&month='.$month.'">'.urldecode($collection).'</a> ['.$data['count'].']
-						<br>Specify 7 versions: ' . implode(', ', $data['sp7_version']) . '
-						<br>Specify 6 versions: ' . implode(', ', $data['sp6_version']);
+				echo '<br>IP Addresses:<ul>';
 
-					if(count($data['isa_number']) > 0)
-						echo '<br>ISA Numbers: ' . implode(', ', $data['isa_number']);
+				foreach($data['ip_address'] as $ip_address)
+					echo '<li><a href="' . LINK . 'ip_info?ip=' . $ip_address . '" target="_blank">' . $ip_address . '</a></li>';
 
-					echo '<br>IP Addresses:<ul>';
+				echo '</ul>
+					Browsers:<ul>';
 
-					foreach($data['ip_address'] as $ip_address)
-						echo '<li><a href="' . LINK . 'ip_info?ip=' . $ip_address . '" target="_blank">' . $ip_address . '</a></li>';
+				foreach($data['browser'] as $browser)
+					echo '<li>' . $browser . '</li>';
 
-					echo '</ul>
-						Browsers:<ul>';
+				echo '</ul>
+					Operating Systems:<ul>';
 
-					foreach($data['browser'] as $browser)
-						echo '<li>' . $browser . '</li>';
+				foreach($data['os'] as $os)
+					echo '<li>' . $os . '</li>';
 
-					echo '</ul>
-						Operating Systems:<ul>';
+				echo '</ul></li><br>';
 
-					foreach($data['os'] as $os)
-						echo '<li>' . $os . '</li>';
-
-					echo '</ul></li><br>';
-
-					$collection_count++;
-					$report_count+=$data['count'];
-
-				}
-
-				echo '</ul></li>';
-
-				$discipline_count++;
+				$collection_count++;
+				$report_count+=$data['count'];
 
 			}
 
 			echo '</ul></li>';
+
+			$discipline_count++;
 
 		}
 
@@ -265,7 +247,6 @@ elseif($view=='1' || $view=='11'){  ?>
 	<table class="table">
 		<thead>
 			<tr>
-				<th>Domain</th>
 				<th>Institution</th>
 				<th>Discipline</th>
 				<th>Collection</th>
@@ -274,7 +255,7 @@ elseif($view=='1' || $view=='11'){  ?>
 			</tr>
 		</thead> <?php
 
-		$cell_count = 6;
+		$cell_count = 5;
 		function to_cell($position,$value='',$class=''){
 
 			global $cell_count;
@@ -301,60 +282,53 @@ elseif($view=='1' || $view=='11'){  ?>
 
 		}
 
-		foreach($domains as $domain => $institutions){
+		$institution_count = count($institutions);
+		$discipline_count = 0;
+		$collection_count = 0;
+		$report_count = 0;
+		foreach($institutions as $institution => $disciplines){
 
 			echo '<tbody>';
 
-			$decoded_domain = urldecode($domain);
-			to_cell(1,'<a href="http://'.$decoded_domain.'" target="_blank">'.$decoded_domain.'</a>','domain');
+			to_cell(1,urldecode($institution),'institution');
 
-			foreach($institutions as $institution => $disciplines){
+			foreach($disciplines as $discipline => $collections){
 
-				to_cell(2,urldecode($institution),'institution');
+				to_cell(2,urldecode($discipline),'discipline');
 
-				foreach($disciplines as $discipline => $collections){
+				foreach($collections as $collection => $data){
+					to_cell(3,'<a data-reports_count="'.$data['count'].'" href="'.LINK.'institution/?institution='.$institution.'&discipline='.$discipline.'&collection='.$collection.'">'.urldecode($collection).'</a> ['.$data['count'].']');
+					to_cell(4,'Specify 7 versions');
+					to_cell(5,implode(', ',$data['sp7_version']));
+					to_cell(4,'Specify 6 versions');
+					to_cell(5,implode(', ',$data['sp6_version']));
 
-					to_cell(3,urldecode($discipline),'discipline');
-
-					foreach($collections as $collection => $data){
-						to_cell(4,'<a data-reports_count="'.$data['count'].'" href="'.LINK.'institution/?domains='.$domain.'&institution='.$institution.'&discipline='.$discipline.'&collection='.$collection.'">'.urldecode($collection).'</a> ['.$data['count'].']');
-						to_cell(5,'Specify 7 versions');
-						foreach($data['sp7_version'] as $version)
-							to_cell(6,$version);
-						to_cell(5,'Specify 6 versions');
-						foreach($data['sp6_version'] as $version)
-							to_cell(6,$version);
-
-						if(count($data['isa_number'])>0){
-							to_cell(5,'ISA Numbers');
-							to_cell(6,implode(', ',$data['isa_number']));
-						}
-
-
-						to_cell(5,'IP Addresses');
-						foreach($data['ip_address'] as $ip_address)
-							to_cell(6,'<a href="'.LINK.'ip_info?ip='.$ip_address. '" target="_blank">'.$ip_address.'</a>');
-
-
-						to_cell(5,'Browsers');
-						foreach($data['browser'] as $browser)
-							to_cell(6,$browser);
-
-						to_cell(5,'Operating Systems');
-
-						foreach($data['os'] as $os)
-							to_cell(6,$os);
-
-						$collection_count++;
-						$report_count+=$data['count'];
-
+					if(count($data['isa_number'])>0){
+						to_cell(4,'ISA Numbers');
+						to_cell(5,implode(', ',$data['isa_number']));
 					}
 
-					$discipline_count++;
+
+					to_cell(4,'IP Addresses');
+					foreach($data['ip_address'] as $ip_address)
+						to_cell(5,'<a href="'.LINK.'ip_info?ip='.$ip_address. '" target="_blank">'.$ip_address.'</a>');
+
+
+					to_cell(4,'Browsers');
+					foreach($data['browser'] as $browser)
+						to_cell(5,$browser);
+
+					to_cell(4,'Operating Systems');
+
+					foreach($data['os'] as $os)
+						to_cell(5,$os);
+
+					$collection_count++;
+					$report_count+=$data['count'];
 
 				}
 
-				$institution_count++;
+				$discipline_count++;
 
 			}
 
@@ -383,7 +357,6 @@ elseif($view=='1' || $view=='11'){  ?>
 		$('#last_refresh_alert')[0].outerHTML += '<div class="alert alert-danger">We have not received any new log files since <?=unix_days_to_human_time($first_unix_begin)?>. Make sure `FILES_LOCATION` is set correctly to your Nginx\'s log directory</div>'; <?php
 	} ?>
 
-	const domain_count = '<?=$domain_count?>';
 	const institution_count = '<?=$institution_count?>';
 	const discipline_count = '<?=$discipline_count?>';
 	const collection_count = '<?=$collection_count?>';
