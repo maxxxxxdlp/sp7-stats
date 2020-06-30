@@ -90,13 +90,40 @@ function extract_data(&$file_data){
 		if($http_code!=204)
 			continue;
 
-		//USER AGENT
+
+		//DOMAIN
 		$needle = '"';
 		$part_end = strpos($line,$needle);//3074
 		$line = substr($line,$part_end+strlen($needle));
 		$needle = '" "';
 		$part_end = strpos($line,$needle);//http://specify.npl.tacc.utexas.edu/
+		$line_data['domain'] = substr($line,0,$part_end);
 		$line = substr($line,$part_end+strlen($needle));
+
+		$part_end = strpos($line_data['domain'],'/');//extract domain from the string
+		if($part_end!==FALSE){
+
+			$part_end+=2;
+			$line_data['domain'] = substr($line_data['domain'],$part_end);
+
+			$part_end = strpos($line_data['domain'],'/');
+			if($part_end!==FALSE)
+				$line_data['domain'] = substr($line_data['domain'],0,$part_end);
+
+		}
+
+		if(substr($line_data['domain'],0,4)==='www.')
+			$line_data['domain'] = substr($line_data['domain'],4);
+
+		$port_begin = strpos($line_data['domain'],':');
+		if($port_begin!==FALSE)
+			$line_data['domain'] = substr($line_data['domain'],0,$port_begin);
+
+		if(in_array($line_data['domain'],DOMAINS_TO_EXCLUDE))
+			continue;
+
+
+		//USER AGENT
 		$needle = '"';
 		$part_end = strpos($line,$needle);
 		$user_agent_string = substr($line,0,$part_end);//Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15
