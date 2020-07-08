@@ -321,7 +321,7 @@ elseif($view=='1' || $view=='11'){  ?>
 						to_cell(5,$version);
 					to_cell(4,'Domains');
 					foreach($data['domain'] as $domain)
-						to_cell(5,$domain);
+						to_cell(5,'<a href="http://' . $domain . '" target="_blank">' . $domain . '</a>');
 
 					if(count($data['isa_number'])>0){
 						to_cell(4,'ISA Numbers');
