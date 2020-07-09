@@ -57,7 +57,8 @@ function head(){
 				crossorigin="anonymous"></script>
 
 	</head>
-	<body class="mb-4"> <?php
+	<body class="mb-4">
+		<h1>Specify 7 Feedback Stats</h1><?php
 }
 
 if(!isset($no_gui))
