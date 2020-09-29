@@ -103,7 +103,7 @@ function format_data_as_chart($data,$data_key,$chart_labels){
 	<canvas id="chart_<?=$chart_id?>_2" width="1000" height="300"></canvas>
 	<script>
 		create_chart($('#chart_<?=$chart_id?>_1'),'<?=$chart_labels[0]?>',JSON.parse('<?=json_encode($labels)?>'),JSON.parse('<?=json_encode($count_data)?>'));
-		create_chart($('#chart_<?=$chart_id?>_2'),'<?=$chart_labels[0]?>',JSON.parse('<?=json_encode($labels)?>'),JSON.parse('<?=json_encode($uniques_data)?>'));
+		create_chart($('#chart_<?=$chart_id?>_2'),'Unique <?=$chart_labels[0]?> (1 per IP)',JSON.parse('<?=json_encode($labels)?>'),JSON.parse('<?=json_encode($uniques_data)?>'));
 	</script> <?php
 
 }
