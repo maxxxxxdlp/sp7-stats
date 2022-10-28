@@ -3,6 +3,8 @@ This website provides some information on the usage of [Specify 7](https://githu
 
 ## Installation
 
+### Preliminary steps
+
 1. Clone this repository
 2. Install Docker and Docker compose
 3. Edit `docker-compose.yml` in all the places where you see `CHANGE THIS:`
@@ -18,8 +20,33 @@ This website provides some information on the usage of [Specify 7](https://githu
    -keyout ./lmtrex/config/privkey.pem \
    -out ./lmtrex/config/fullchain.pem
    ```
-5. If you want GitHub stats to work, set `GITHUB_TOKEN_LOCATION` to a location of a PHP file that defines `$github_username` and `$github_token`. The user specified in `$github_username` should have push permissions to the repository, stats of which would be displayed (e.x `specify7` and `specify6`)
-6. Start the containers: `docker compose up -d`
+   
+### Create a GitHub OAuth App
+
+In order to enable authentication though GitHub and usage of GitHub APIs, a GitHub OAuth application needs to be created.
+
+This can be done for a GitHub organization or user profile:
+
+1. Open organization / user settings on GitHub
+2. On the sidebar, select "Developer Settings"
+3. Select "OAuth Apps"
+4. Press "New OAuth App"
+5. Fill out the required information
+6. Set authentication callback URL to this URL:
+
+   ```
+   https://localhost/sign-in
+   ```
+
+   When in production, replace `localhost` with the actual hostname
+
+7. Press "Generate a new client secret"
+8. Client ID and Client Secret is displayed on the OAUth app configuration page.
+9. Write them down somewhere temporary as they would be needed later
+
+### Start up
+
+Start the containers: `docker compose up -d`
 
 
 ### Optional settings
