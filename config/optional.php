@@ -35,6 +35,7 @@ const DOMAINS_TO_EXCLUDE = [
 	'db5.biwebdbtest.nhm.ku.edu',
 	'db6.biwebdbtest.nhm.ku.edu',
 	'sp7demofish.specifycloud.org',
+	'test.specifysystems.org',
 ];
 
 
@@ -79,7 +80,36 @@ const CHART_BORDER_COLORS = ["rgba(86,206,255,1)", "rgba(162,235,54,1)", "rgba(8
 
 
 # Specifies the list of repositories that are available to chose from in the `github/` page
-const ALLOWED_REPOSITORIES = ['specify7','specify6','webportal-installer','specify7-docker'];
+const ALLOWED_REPOSITORIES = [
+	"specify7",
+	"specify6",
+	"docker-compositions",
+	"data-management",
+	"web-asset-server",
+	"specify7-test-panel",
+	"sp7-stats",
+	"taxa_tree",
+	"report-runner-service",
+	"webportal-installer",
+	"taxa_tree_docker",
+	"specify_tools",
+	"schema_to_html",
+	"open_api_tools",
+	"specify7-docker",
+	"viewset-schema",
+	"taxa_tree_stats",
+	"sp6-stats",
+	"workbench-uploader",
+	"workbench-uploader-abandoned",
+	"ipt",
+	"solr-log-tools",
+	"specify-contributions",
+	"Specify-6-Knowledge-Base",
+	"django-dumpdb",
+	"TreeMap",
+	"FlexiSchema",
+	"specify-el"
+];
 
 
 
