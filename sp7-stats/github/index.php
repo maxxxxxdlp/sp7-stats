@@ -7,6 +7,7 @@ require_once('../components/header.php');
 require_once('../components/menu.php');
 
 
+// TODO: update this
 require_once(GITHUB_TOKEN_LOCATION);
 if(!isset($github_username) && !isset($github_token))
 	exit('No github username or token provided');

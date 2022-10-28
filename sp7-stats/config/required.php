@@ -1,20 +1,15 @@
 <?php
 
-# Whether to print error messages and warnings
-define('DEVELOPMENT',FALSE);
+define('DEVELOPMENT',getenv('DEVELOPMENT') == 'TRUE');
 
-# Address the website would be served on
-define('LINK', 'http://localhost:80/');
+define('LINK', getenv('LINK'));
 
-# Location to the place where all of your access.log files are located.
-# Make sure the web server has read permissions to all the files in this folder.
-define('FILES_LOCATION','/Users/maxpatiiuk/Downloads/Sp7-stats/');
-
+const FILES_LOCATION = '/home/specify/access-logs/';
 # Set this to an empty folder. This would be the destination for all uncompressed
 # access.log and other files created in the process.
 # Make sure the web server has write permissions to this folder.
 # **Warning!** All of the files present in this directory would be deleted.
-define('WORKING_LOCATION','/Users/maxpatiiuk/Downloads/Sp7-stats/files/');
+const WORKING_LOCATION = '/home/specify/working-dir/';
 
-# File that stores $github_username and $github_token for GitHub API to work
-define('GITHUB_TOKEN_LOCATION','/Users/maxpatiiuk/Downloads/Sp7-stats/github_tokens.php');
+define('GITHUB_CLIENT_ID', getenv('GITHUB_CLIENT_ID'));
+define('GITHUB_SECRET', getenv('GITHUB_SECRET'));

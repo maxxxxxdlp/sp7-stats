@@ -21,26 +21,9 @@ RUN echo -e \
 RUN addgroup -S specify -g 1001 && adduser -S specify -G specify -u 1001
 USER specify
 
-ARG DEVELOPMENT
-ARG LINK
-ARG FILES_LOCATION
-ARG WORKING_LOCATION
-ARG GITHUB_CLIENT_ID
-ARG GITHUB_SECRET
-
 WORKDIR /home/specify
 
 COPY --chown=specify:specify ./ ./sp7-stats
-
-RUN echo -e \
-  "<?php" \
-  "\ndefine('DEVELOPMENT', ${DEVELOPMENT});" \
-  "\ndefine('LINK', '${LINK}');" \
-  "\ndefine('FILES_LOCATION', '${FILES_LOCATION}');" \
-  "\ndefine('WORKING_LOCATION', '${WORKING_LOCATION}');" \
-  "\ndefine('GITHUB_CLIENT_ID', '${GITHUB_CLIENT_ID}');" \
-  "\ndefine('GITHUB_SECRET', '${GITHUB_SECRET}');" \
-  > ./sp7-stats/front_end/config/required.php
 
 RUN mkdir working_dir
 RUN chmod -R 777 working_dir
