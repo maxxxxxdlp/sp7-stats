@@ -1,1 +1,4 @@
 /access-logs
+.env
+sp7-stats/config/fullchain.pem
+sp7-stats/config/privkey.pem

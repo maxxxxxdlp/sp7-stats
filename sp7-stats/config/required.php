@@ -11,5 +11,4 @@ const FILES_LOCATION = '/home/specify/access-logs/';
 # **Warning!** All of the files present in this directory would be deleted.
 const WORKING_LOCATION = '/home/specify/working-dir/';
 
-define('GITHUB_CLIENT_ID', getenv('GITHUB_CLIENT_ID'));
-define('GITHUB_SECRET', getenv('GITHUB_SECRET'));
+define('GITHUB_TOKEN', getenv('GITHUB_TOKEN'));

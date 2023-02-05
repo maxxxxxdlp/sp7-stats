@@ -1,16 +1,8 @@
 <?php
 
-global $github_username;
-global $github_token;
-
 require_once('../components/header.php');
 require_once('../components/menu.php');
 
-
-// TODO: update this
-require_once(GITHUB_TOKEN_LOCATION);
-if(!isset($github_username) && !isset($github_token))
-	exit('No github username or token provided');
 
 if(count(ALLOWED_REPOSITORIES)==0)
 	exit('No repositories set in `ALLOWED_REPOSITORIES`');
@@ -119,9 +111,6 @@ else {
 
 		function request_data($url,$target_dir,$target_file,$page){
 
-			global $github_username;
-			global $github_token;
-
 			$original_url = $url;
 			$original_file_name = $target_file;
 
@@ -138,12 +127,12 @@ else {
 
 			$cURLConnection = curl_init($url);
 			curl_setopt($cURLConnection,
-			            CURLOPT_HTTPHEADER,
-			            [
-				            'User-Agent: ' . $github_username,
-			            ]
+				CURLOPT_HTTPHEADER,
+				[
+					'User-Agent: Specify 6 & 7 Usage Stats',
+					 'Authorization: Bearer ' . GITHUB_TOKEN
+				]
 			);
-			curl_setopt($cURLConnection, CURLOPT_USERPWD, $github_username . ':' . $github_token);
 			curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, TRUE);
 
 			$api_response = curl_exec($cURLConnection);
@@ -169,6 +158,7 @@ else {
 			if($recursive)
 				request_data($original_url,$target_dir,$original_file_name,$page+1);
 
+var_dump($data);
 			return $data;
 
 		}

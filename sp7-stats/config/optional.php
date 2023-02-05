@@ -28,12 +28,6 @@ const INSTITUTIONS_TO_EXCLUDE = [
 
 # Set a list of domains, records from which are to be excluded
 const DOMAINS_TO_EXCLUDE = [
-	'db1.biwebdbtest.nhm.ku.edu',
-	'db2.biwebdbtest.nhm.ku.edu',
-	'db3.biwebdbtest.nhm.ku.edu',
-	'db4.biwebdbtest.nhm.ku.edu',
-	'db5.biwebdbtest.nhm.ku.edu',
-	'db6.biwebdbtest.nhm.ku.edu',
 	'sp7demofish.specifycloud.org',
 	'test.specifysystems.org',
 ];
@@ -80,6 +74,7 @@ const CHART_BORDER_COLORS = ["rgba(86,206,255,1)", "rgba(162,235,54,1)", "rgba(8
 
 
 # Specifies the list of repositories that are available to chose from in the `github/` page
+## FEATURE: remove then need for this - fetch list of repositories dynamically
 const ALLOWED_REPOSITORIES = [
 	"specify7",
 	"specify6",
