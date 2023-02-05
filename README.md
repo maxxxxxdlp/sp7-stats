@@ -3,6 +3,20 @@
 This website provides some information on the usage
 of [Specify 7](https://github.com/specify/specify7).
 
+## Screenshots
+
+Usage stats in list view:
+
+![Usage stats in list view](./docs/img/list.png)
+
+Usage stats in table view:
+
+![Usage stats in table view](./docs/img/table.png)
+
+GitHub repository stats:
+
+![GitHub repository stats](./docs/img/github.png)
+
 ## Installation
 
 ### Create a GitHub OAuth App
