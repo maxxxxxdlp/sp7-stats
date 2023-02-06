@@ -1,45 +1,32 @@
-$(function(){
+$(function () {
+  const search = $('#search');
+  const search_field = search.find('input');
+  let targets = null;
 
-	const search = $('#search');
-	const search_field = search.find('input');
-	let targets = null;
+  if (search_mode === 'table') targets = $('tbody');
+  else targets = $('ol:not(.breadcrumb) > li');
 
-	if(search_mode==='table')
-		targets = $('tbody');
-	else
-		targets = $('ol:not(.breadcrumb) > li');
+  search.bind('input', filter);
 
-	search.bind('input',filter);
+  function filter() {
+    search_query = search_field.val();
 
-	function filter(){
+    if (search_query === '') targets.show();
+    else {
+      const regex = new RegExp(search_query, 'i');
 
-		search_query = search_field.val();
+      $.each(targets, function (key, el) {
+        el = $(el);
 
-		if(search_query==='')
-			targets.show();
-		else {
+        const text = el.text();
 
-			const regex = new RegExp(search_query,"i");
+        if (text.match(regex) !== null) el.show();
+        else el.hide();
+      });
+    }
 
-			$.each(targets,function(key,el){
+    if (typeof search_callback === 'function') search_callback();
+  }
 
-				el = $(el);
-
-				const text = el.text();
-
-				if(text.match(regex)!==null)
-					el.show();
-				else
-					el.hide();
-
-			});
-		}
-
-		if(typeof search_callback === "function")
-			search_callback();
-
-	}
-
-	filter();
-
+  filter();
 });

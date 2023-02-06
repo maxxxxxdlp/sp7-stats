@@ -39,10 +39,10 @@ require_once('../components/paginator.php');
 
 $page = 1;
 if(array_key_exists('paginator',$_GET) &&
-   array_key_exists($_GET['paginator'],$graphs) &&
-   array_key_exists('page',$_GET) &&
-   is_numeric($_GET['page']) &&
-   $_GET['page']>1){
+	 array_key_exists($_GET['paginator'],$graphs) &&
+	 array_key_exists('page',$_GET) &&
+	 is_numeric($_GET['page']) &&
+	 $_GET['page']>1){
 
 	$page = $_GET['page'];
 	$graphs[$_GET['paginator']]['page']=$page;
