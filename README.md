@@ -25,8 +25,8 @@ GitHub repository stats:
 2. Install Docker and Docker compose
 3. Copy `./env.example` file to `./.env` and change the variables as applicable
 4. Edit `docker-compose.yml` in all the places where you see `CHANGE THIS:`
-5. Copy `./sp7-stats/config/auth.example.confg` to
-   `./sp7-stats/config/auth.php` and change the variables as applicable. That
+5. Copy `./sp7-stats/config/auth.example.conf` to
+   `./sp7-stats/config/auth.conf` and change the variables as applicable. That
    would require you to create a GitHub OAuth
    App. [See the instructions](https://github.com/specify/nginx-with-github-auth#installation)
 6. Generate `fullchain.pem` and `privkey.pem` (certificate
