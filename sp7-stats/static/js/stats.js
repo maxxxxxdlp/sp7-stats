@@ -10,7 +10,7 @@ function update_stats(institutions_count=null,
 	stats.html(institutions_count+` institutions<br>` +
 		disciplines_count+` disciplines<br>` +
 		collections_count+` collections<br>` +
-		reports_count+` reports`);
+		reports_count+` captures`);
 
 }
 
