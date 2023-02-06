@@ -122,8 +122,7 @@ function extract_data(&$file_data){
 
 		foreach(DOMAINS_TO_EXCLUDE as $domain)
       if(str_contains($line_data['domain'],$domain))
-        continue;
-
+        continue 2;
 
 		//USER AGENT
 		$needle = '"';
