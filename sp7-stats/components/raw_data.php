@@ -121,7 +121,7 @@ function extract_data(&$file_data){
 			$line_data['domain'] = substr($line_data['domain'],0,$port_begin);
 
 		foreach(DOMAINS_TO_EXCLUDE as $domain)
-      if(str_contains($line_data['domain'],DOMAINS_TO_EXCLUDE))
+      if(str_contains($line_data['domain'],$domain))
         continue;
 
 

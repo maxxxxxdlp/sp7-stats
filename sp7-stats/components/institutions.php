@@ -231,7 +231,9 @@ function compile_institutions_end(){
 			'November',
 			'December',
 		];
-		return array_search($x,$months_names)>array_search($y,$months_names);
+		$left = array_search($x,$months_names);
+		$right = array_search($y,$months_names);
+		return $left === $right ? 0 : ($left < $right ? -1 : 1);
 	}
 
 	$i=0;
