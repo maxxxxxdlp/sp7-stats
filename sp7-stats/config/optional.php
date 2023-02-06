@@ -28,8 +28,7 @@ const INSTITUTIONS_TO_EXCLUDE = [
 
 # Set a list of domains, records from which are to be excluded
 const DOMAINS_TO_EXCLUDE = [
-	'sp7demofish.specifycloud.org',
-	'test.specifysystems.org',
+	'.test.specifysystems.org',
 ];
 
 

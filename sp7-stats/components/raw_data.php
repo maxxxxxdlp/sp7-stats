@@ -120,8 +120,9 @@ function extract_data(&$file_data){
 		if($port_begin!==FALSE)
 			$line_data['domain'] = substr($line_data['domain'],0,$port_begin);
 
-		if(in_array($line_data['domain'],DOMAINS_TO_EXCLUDE))
-			continue;
+		foreach(DOMAINS_TO_EXCLUDE as $domain)
+      if(str_contains($line_data['domain'],DOMAINS_TO_EXCLUDE))
+        continue;
 
 
 		//USER AGENT
