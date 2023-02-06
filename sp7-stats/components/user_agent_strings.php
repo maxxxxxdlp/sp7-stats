@@ -11,14 +11,19 @@ function identify_data_for_user_agent_string($user_agent_string){
 
 
 	$os_simple_needles = [
+		'Windows NT 11.0.22'=>'Windows 11',
 		'Windows NT 10.0'=>'Windows 10',
 		'Windows NT 6.3'=>'Windows 8.1',
 		'Windows NT 6.2'=>'Windows 7',
 		'Windows NT 6.0'=>'Windows Vista',
 		'Windows NT 5.1'=>'Windows XP',
 		'Windows'=>'Windows',
-		'Mac OS X 10_15'=>'Mac OS X Catalina',
-		'Mac OS X 10_14'=>'Mac OS X Mojave',
+		'Mac OS X 10_19'=>'macOS',
+		'Mac OS X 10_18'=>'macOS Ventura',
+		'Mac OS X 10_17'=>'macOS Monterey',
+		'Mac OS X 10_16'=>'macOS Big Sur',
+		'Mac OS X 10_15'=>'macOS Catalina',
+		'Mac OS X 10_14'=>'macOS Mojave',
 		'Mac OS X 10_13'=>'Mac OS X High Sierra',
 		'Mac OS X 10_12'=>'Mac OS X Sierra',
 		'Mac OS X 10_11'=>'Mac OS X El Capitan',
