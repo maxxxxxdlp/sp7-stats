@@ -11,4 +11,4 @@ const FILES_LOCATION = '/home/specify/access-logs/';
 # **Warning!** All of the files present in this directory would be deleted.
 const WORKING_LOCATION = '/home/specify/working-dir/';
 
-define('GITHUB_TOKEN', getenv('GITHUB_TOKEN'));
+define('GITHUB_TOKEN', $_COOKIE['token']);

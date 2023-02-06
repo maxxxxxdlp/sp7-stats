@@ -130,7 +130,7 @@ else {
 				CURLOPT_HTTPHEADER,
 				[
 					'User-Agent: Specify 6 & 7 Usage Stats',
-					 'Authorization: Bearer ' . GITHUB_TOKEN
+					 'Authorization: bearer ' . GITHUB_TOKEN
 				]
 			);
 			curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, TRUE);
@@ -158,7 +158,6 @@ else {
 			if($recursive)
 				request_data($original_url,$target_dir,$original_file_name,$page+1);
 
-var_dump($data);
 			return $data;
 
 		}

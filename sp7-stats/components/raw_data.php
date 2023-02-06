@@ -6,7 +6,9 @@ global $last_time;
 global $fetched_user_agent_strings_count;
 
 
-//174.221.128.140 - - [24/May/2020:09:36:13 -0400] "GET /capture?version=v7.2.0-227-g47813e2&dbVersion=6.7.03&institution=University+of+Texas+at+Austin&discipline=NPL+collections&collection=NPL+collections&isaNumber= HTTP/1.1" 204 3071 "http://specify.npl.tacc.utexas.edu/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15"
+// Example input:
+// 174.221.128.140 - - [24/May/2020:09:36:13 -0400] "GET /capture?version=v7.2.0-227-g47813e2&dbVersion=6.7.03&institution=University+of+Texas+at+Austin&discipline=NPL+collections&collection=NPL+collections&isaNumber= HTTP/1.1" 204 3071 "http://specify.npl.tacc.utexas.edu/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15"
+// 64.189.134.67 - - [06/Feb/2023:03:58:17 +0000] "GET /capture?version=edge&dbVersion=6.8.02&institution=University+of+Kansas+Biodiversity+Institute&institutionGUID=77ff1bff-af23-4647-b5d1-9d3c414fd003&discipline=Ichthyology&collection=KUFishvoucher&collectionGUID=3f55b3fa-292d-4170-bd46-66dca41d7f05&isaNumber=null HTTP/1.1" 204 5400 "https://sp7demofish.specifycloud.org/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36"
 function extract_data(&$file_data){
 
 	global $total_lines;

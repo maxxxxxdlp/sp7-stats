@@ -24,3 +24,14 @@ RUN mkdir ./working-dir && chown -R www-data:www-data ./working-dir
 USER www-data
 
 COPY --chown=www-data:www-data ./ ./sp7-stats
+
+
+
+FROM node:alpine AS auth
+RUN mkdir /home/node/auth
+WORKDIR /home/node/auth
+COPY ./auth/package.json ./package.json
+COPY ./auth/package-lock.json ./package-lock.json
+RUN npm ci
+COPY ./auth ./
+CMD node ./server.js
