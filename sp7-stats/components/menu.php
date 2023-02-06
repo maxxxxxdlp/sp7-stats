@@ -1,6 +1,6 @@
 <div class="btn-group" id="menu">
 	<a
-		href="<?=LINK?>refresh_data"
+		href="<?=LINK?>refresh_data/"
 		class="btn btn-success"
 		id="refresh"
 		target="_blank">Refresh Data</a>

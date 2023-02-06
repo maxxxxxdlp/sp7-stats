@@ -209,7 +209,7 @@ if($view=='0' || $view=='00') { ?>
 				echo '</ul>Domains:<ul>';
 
 				foreach($data['domain'] as $domain)
-					echo '<li><a href="http://' . $domain . '" target="_blank">' . $domain . '</a></li>';
+					echo '<li><a href="https://' . $domain . '" target="_blank">' . $domain . '</a></li>';
 
 				echo '</ul>';
 
@@ -219,7 +219,7 @@ if($view=='0' || $view=='00') { ?>
 				echo 'IP Addresses:<ul>';
 
 				foreach($data['ip_address'] as $ip_address)
-					echo '<li><a href="' . LINK . 'ip_info?ip=' . $ip_address . '" target="_blank">' . $ip_address . '</a></li>';
+					echo '<li><a href="' . LINK . 'ip_info/?ip=' . $ip_address . '" target="_blank">' . $ip_address . '</a></li>';
 
 				echo '</ul>
 					Browsers:<ul>';
@@ -321,7 +321,7 @@ elseif($view=='1' || $view=='11'){  ?>
 						to_cell(5,$version);
 					to_cell(4,'Domains');
 					foreach($data['domain'] as $domain)
-						to_cell(5,'<a href="http://' . $domain . '" target="_blank">' . $domain . '</a>');
+						to_cell(5,'<a href="https://' . $domain . '" target="_blank">' . $domain . '</a>');
 
 					if(count($data['isa_number'])>0){
 						to_cell(4,'ISA Numbers');
@@ -331,7 +331,7 @@ elseif($view=='1' || $view=='11'){  ?>
 
 					to_cell(4,'IP Addresses');
 					foreach($data['ip_address'] as $ip_address)
-						to_cell(5,'<a href="'.LINK.'ip_info?ip='.$ip_address. '" target="_blank">'.$ip_address.'</a>');
+						to_cell(5,'<a href="'.LINK.'ip_info/?ip='.$ip_address. '" target="_blank">'.$ip_address.'</a>');
 
 
 					to_cell(4,'Browsers');

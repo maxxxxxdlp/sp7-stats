@@ -8,6 +8,7 @@ if(!array_key_exists('ip',$_GET))
 
 $ip_address = $_GET['ip'];
 
+// HTTPs only available in a paid version of the API
 $ip_data = json_decode(file_get_contents("http://ip-api.com/json/".$ip_address."?fields=country,regionName,city,org,reverse"),true);
 
 $column_mapping = [
