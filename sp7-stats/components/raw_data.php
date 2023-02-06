@@ -66,7 +66,7 @@ function extract_data(&$file_data){
 		if(substr($url,0,strlen('/capture?'))!=='/capture?')
 			continue;
 
-		$url = substr($url,strlen('/capture?'));
+		$url = urldecode(substr($url,strlen('/capture?')));
 		$url = explode('&',$url);
 
 		foreach($url as $param){
