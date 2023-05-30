@@ -70,10 +70,9 @@ function extract_data(&$file_data){
 		$url = explode('&',$url);
 
 		foreach($url as $param){
-
 			$param = explode('=',$param);
-			$line_data[$param[0]] = $param[1];
-
+			if(count($param)>1)
+				$line_data[$param[0]] = $param[1];
 		}
 
 		if(in_array(urldecode($line_data['institution']),INSTITUTIONS_TO_EXCLUDE))
